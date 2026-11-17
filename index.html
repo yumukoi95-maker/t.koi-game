@@ -196,14 +196,14 @@
     <!-- ========================================== -->
     <!-- CHARACTER SELECT & MAIN MENU OVERLAY       -->
     <!-- ========================================== -->
-    <div id="menu-screen" class="ui-layer interactive flex flex-col justify-between p-2.5 md:p-4 pt-11 md:pt-11 bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-slate-950/95 backdrop-blur-[2px] overflow-y-auto">
+    <div id="menu-screen" class="ui-layer interactive flex flex-col justify-between p-2.5 md:p-4 pt-11 md:pt-11 bg-gradient-to-b from-slate-950/85 via-transparent to-slate-950/95 overflow-y-auto">
         
         <!-- Header & Mode Selection -->
-        <div class="max-w-7xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+        <div class="max-w-7xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-2 border-b border-slate-800/80 pb-2 bg-slate-950/75 px-3 py-1.5 rounded-xl backdrop-blur-md">
             <div>
                 <div class="flex items-center gap-2">
                     <span class="px-2 py-0.5 text-[10px] font-arcade bg-gradient-to-r from-amber-500 to-red-600 text-black font-black rounded tracking-wider">20 FIGHTERS • AAA 3D (by T.Koi)</span>
-                    <span class="text-xs text-cyan-400 font-semibold tracking-widest uppercase">PS5 DualSense + Arcade Synth BGM</span>
+                    <span class="text-xs text-cyan-400 font-semibold tracking-widest uppercase">LIVE 3D CHARACTER PREVIEW STAGE</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl md:text-4xl font-arcade font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-amber-400 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
                     T.Koi Fighter!!
@@ -233,102 +233,140 @@
             </div>
         </div>
 
-        <!-- Middle Preview Panel: P1 Selected vs P2 Selected (with 3D Models visible behind!) -->
-        <div class="max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-3 my-auto py-2 items-center">
+        <!-- Middle Preview Panel: P1 3D Showcase Window | VS Controls | P2 3D Showcase Window -->
+        <div class="max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-3 my-auto py-1 items-end">
             
-            <!-- P1 Info Card -->
-            <div class="md:col-span-4 bg-slate-950/85 border-l-4 border-cyan-400 rounded-r-xl p-3.5 shadow-2xl backdrop-blur-md">
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-arcade font-bold text-cyan-400 tracking-widest">PLAYER 1 FIGHTER</span>
-                    <span id="p1-style-badge" class="text-[11px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 font-semibold">Lightning Karate</span>
-                </div>
-                <h2 id="p1-select-name" class="text-3xl font-arcade font-black text-white mt-0.5">AISEI</h2>
-                <p id="p1-select-title" class="text-xs text-amber-400 font-bold tracking-wider uppercase">"The Lightning Striker"</p>
-                <p id="p1-select-desc" class="text-xs text-slate-300 mt-1.5 leading-relaxed h-10">
-                    High-voltage Mishima-style karate prodigy with explosive electric uppercuts and blinding rushdown speed.
-                </p>
-                <!-- Stat Bars -->
-                <div class="space-y-1.5 mt-2.5 text-xs">
-                    <div class="flex items-center gap-2">
-                        <span class="w-16 text-slate-400 font-bold">POWER</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-pow" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 w-4/5"></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-16 text-slate-400 font-bold">SPEED</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-spd" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 w-11/12"></div></div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="w-16 text-slate-400 font-bold">RANGE</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-rng" class="h-full bg-gradient-to-r from-cyan-400 to-purple-500 w-3/4"></div></div>
+            <!-- P1 Info Card & 3D Preview Controls -->
+            <div class="md:col-span-4 flex flex-col gap-1.5">
+                <!-- Live 3D Pedestal Floating Header & Pose Trigger -->
+                <div class="flex items-center justify-between bg-slate-950/80 border border-cyan-500/50 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+                    <span class="text-[10px] font-arcade font-bold text-cyan-300 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> 3D P1 SHOWCASE PEDESTAL
+                    </span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="triggerPreviewPose(1, 'special')" class="px-2 py-0.5 rounded bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-200 border border-cyan-400/50 text-[10px] font-arcade font-bold transition">
+                            ⚡ TEST POSE
+                        </button>
+                        <button onclick="rotatePreviewModel(1)" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold transition" title="Rotate 3D Model">
+                            🔄 360°
+                        </button>
                     </div>
                 </div>
-                <div class="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span class="text-slate-400 font-semibold">RAGE ART (R2):</span>
-                    <span id="p1-select-special" class="text-cyan-300 font-arcade font-bold">⚡ Thunder God Fist</span>
+
+                <div class="bg-slate-950/85 border-l-4 border-cyan-400 rounded-r-xl p-3 shadow-2xl backdrop-blur-md">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-arcade font-bold text-cyan-400 tracking-widest">PLAYER 1 FIGHTER</span>
+                        <span id="p1-style-badge" class="text-[11px] px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 font-semibold">Lightning Karate</span>
+                    </div>
+                    <h2 id="p1-select-name" class="text-2xl md:text-3xl font-arcade font-black text-white mt-0.5">AISEI</h2>
+                    <p id="p1-select-title" class="text-xs text-amber-400 font-bold tracking-wider uppercase">"The Lightning Striker"</p>
+                    <p id="p1-select-desc" class="text-xs text-slate-300 mt-1 leading-relaxed h-9 overflow-hidden">
+                        High-voltage Mishima-style karate prodigy with explosive electric uppercuts and blinding rushdown speed.
+                    </p>
+                    <!-- Stat Bars -->
+                    <div class="space-y-1 mt-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">POWER</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-pow" class="h-full bg-gradient-to-r from-cyan-400 to-blue-500 w-4/5"></div></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">SPEED</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-spd" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 w-11/12"></div></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">TECHNIQUE</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p1-stat-rng" class="h-full bg-gradient-to-r from-cyan-400 to-purple-500 w-3/4"></div></div>
+                        </div>
+                    </div>
+                    <div class="mt-2 pt-1.5 border-t border-slate-800 flex items-center justify-between text-xs">
+                        <span class="text-slate-400 font-semibold">RAGE ART (R2):</span>
+                        <span id="p1-select-special" class="text-cyan-300 font-arcade font-bold">⚡ Thunder God Fist</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Center VS & Stage Picker (Leaves center clear so 3D fighters stand dynamically in background) -->
-            <div class="md:col-span-4 flex flex-col items-center justify-center text-center py-2">
+            <!-- Center VS & Stage Picker (Leaves Left & Right 3D Pedestals completely unobstructed!) -->
+            <div class="md:col-span-4 flex flex-col items-center justify-center text-center py-1">
                 <div class="text-3xl md:text-5xl font-arcade font-black italic text-transparent bg-clip-text bg-gradient-to-b from-amber-300 via-orange-500 to-red-600 drop-shadow-[0_5px_15px_rgba(245,158,11,0.5)]">
                     VS
                 </div>
-                <p class="text-[11px] text-slate-300 bg-slate-950/80 px-3 py-1 rounded-full border border-slate-700 mt-1">
-                    Click roster for <strong class="text-cyan-400">P1</strong> • Right-Click (or toggle button) for <strong class="text-rose-400">P2</strong>
+                <p class="text-[11px] text-slate-200 bg-slate-950/85 px-3 py-1 rounded-full border border-slate-700 mt-1 shadow">
+                    Left-Click: <strong class="text-cyan-400">P1</strong> • Right-Click: <strong class="text-rose-400">P2</strong>
                 </p>
 
                 <!-- Active Cursor Selector Toggle for Single Mouse/Touch Users -->
-                <div class="flex items-center gap-1.5 mt-2 bg-slate-900/90 p-1 rounded-lg border border-slate-700">
+                <div class="flex items-center gap-1.5 mt-1.5 bg-slate-900/90 p-1 rounded-lg border border-slate-700">
                     <button id="cursor-btn-p1" onclick="setActiveSelectCursor(1)" class="px-2.5 py-1 rounded text-xs font-bold bg-cyan-500 text-slate-950 transition">
-                        Selecting: P1
+                        Cursor: P1
                     </button>
                     <button id="cursor-btn-p2" onclick="setActiveSelectCursor(2)" class="px-2.5 py-1 rounded text-xs font-bold text-slate-300 hover:bg-slate-800 transition">
-                        Selecting: P2 / CPU
+                        Cursor: P2 / CPU
                     </button>
                 </div>
 
                 <!-- Stage Selector -->
-                <div class="mt-3 bg-slate-950/90 px-3 py-2 rounded-xl border border-slate-700/80 w-full max-w-xs">
+                <div class="mt-2 bg-slate-950/90 px-3 py-1.5 rounded-xl border border-slate-700/80 w-full max-w-xs">
                     <div class="text-[10px] font-arcade text-amber-400 tracking-widest uppercase mb-1">ARENA STAGE SELECT</div>
                     <div class="grid grid-cols-3 gap-1.5">
-                        <button onclick="selectStage(0)" id="stage-btn-0" class="px-2 py-1.5 rounded text-[11px] font-bold bg-amber-500 text-slate-950 truncate">
+                        <button onclick="selectStage(0)" id="stage-btn-0" class="px-2 py-1 rounded text-[11px] font-bold bg-amber-500 text-slate-950 truncate">
                             1. Neon Dojo
                         </button>
-                        <button onclick="selectStage(1)" id="stage-btn-1" class="px-2 py-1.5 rounded text-[11px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 truncate">
+                        <button onclick="selectStage(1)" id="stage-btn-1" class="px-2 py-1 rounded text-[11px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 truncate">
                             2. Dragon Temple
                         </button>
-                        <button onclick="selectStage(2)" id="stage-btn-2" class="px-2 py-1.5 rounded text-[11px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 truncate">
+                        <button onclick="selectStage(2)" id="stage-btn-2" class="px-2 py-1 rounded text-[11px] font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 truncate">
                             3. Cyber Arena
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- P2 Info Card -->
-            <div class="md:col-span-4 bg-slate-950/85 border-r-4 border-rose-500 rounded-l-xl p-3.5 shadow-2xl backdrop-blur-md text-right">
-                <div class="flex items-center justify-between flex-row-reverse">
-                    <span id="p2-header-tag" class="text-xs font-arcade font-bold text-rose-400 tracking-widest">CPU / PLAYER 2</span>
-                    <span id="p2-style-badge" class="text-[11px] px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-700/50 font-semibold">Supreme Grandmaster</span>
+            <!-- P2 Info Card & 3D Preview Controls -->
+            <div class="md:col-span-4 flex flex-col gap-1.5">
+                <!-- Live 3D Pedestal Floating Header & Pose Trigger -->
+                <div class="flex items-center justify-between flex-row-reverse bg-slate-950/80 border border-rose-500/50 rounded-lg px-2.5 py-1 backdrop-blur-sm">
+                    <span class="text-[10px] font-arcade font-bold text-rose-300 flex items-center gap-1.5">
+                        3D P2 SHOWCASE PEDESTAL <span class="w-2 h-2 rounded-full bg-rose-400 animate-ping"></span>
+                    </span>
+                    <div class="flex items-center gap-1">
+                        <button onclick="rotatePreviewModel(2)" class="px-1.5 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-bold transition" title="Rotate 3D Model">
+                            🔄 360°
+                        </button>
+                        <button onclick="triggerPreviewPose(2, 'special')" class="px-2 py-0.5 rounded bg-rose-500/20 hover:bg-rose-500/40 text-rose-200 border border-rose-400/50 text-[10px] font-arcade font-bold transition">
+                            🔥 TEST POSE
+                        </button>
+                    </div>
                 </div>
-                <h2 id="p2-select-name" class="text-3xl font-arcade font-black text-white mt-0.5">T.KOI</h2>
-                <p id="p2-select-title" class="text-xs text-amber-400 font-bold tracking-wider uppercase">"The Grandmaster Boss"</p>
-                <p id="p2-select-desc" class="text-xs text-slate-300 mt-1.5 leading-relaxed h-10">
-                    Supreme muscular martial arts legend wielding golden dragon lightning and devastating counter-strikes.
-                </p>
-                <!-- Stat Bars -->
-                <div class="space-y-1.5 mt-2.5 text-xs">
-                    <div class="flex items-center gap-2 flex-row-reverse">
-                        <span class="w-16 text-slate-400 font-bold">POWER</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-pow" class="h-full bg-gradient-to-l from-rose-500 to-amber-500 w-full ml-auto"></div></div>
+
+                <div class="bg-slate-950/85 border-r-4 border-rose-500 rounded-l-xl p-3 shadow-2xl backdrop-blur-md text-right">
+                    <div class="flex items-center justify-between flex-row-reverse">
+                        <span id="p2-header-tag" class="text-xs font-arcade font-bold text-rose-400 tracking-widest">CPU / PLAYER 2</span>
+                        <span id="p2-style-badge" class="text-[11px] px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-700/50 font-semibold">Supreme Grandmaster</span>
                     </div>
-                    <div class="flex items-center gap-2 flex-row-reverse">
-                        <span class="w-16 text-slate-400 font-bold">SPEED</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-spd" class="h-full bg-gradient-to-l from-rose-500 to-orange-400 w-4/5 ml-auto"></div></div>
+                    <h2 id="p2-select-name" class="text-2xl md:text-3xl font-arcade font-black text-white mt-0.5">T.KOI</h2>
+                    <p id="p2-select-title" class="text-xs text-amber-400 font-bold tracking-wider uppercase">"The Grandmaster Boss"</p>
+                    <p id="p2-select-desc" class="text-xs text-slate-300 mt-1 leading-relaxed h-9 overflow-hidden">
+                        Supreme muscular martial arts legend wielding golden dragon lightning and devastating counter-strikes.
+                    </p>
+                    <!-- Stat Bars -->
+                    <div class="space-y-1 mt-2 text-xs">
+                        <div class="flex items-center gap-2 flex-row-reverse">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">POWER</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-pow" class="h-full bg-gradient-to-l from-rose-500 to-amber-500 w-full ml-auto"></div></div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-row-reverse">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">SPEED</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-spd" class="h-full bg-gradient-to-l from-rose-500 to-orange-400 w-4/5 ml-auto"></div></div>
+                        </div>
+                        <div class="flex items-center gap-2 flex-row-reverse">
+                            <span class="w-20 text-slate-400 font-bold text-[10px]">TECHNIQUE</span>
+                            <div class="flex-1 h-1.5 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-rng" class="h-full bg-gradient-to-l from-rose-500 to-purple-500 w-11/12 ml-auto"></div></div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2 flex-row-reverse">
-                <div class="mt-2 pt-1.5 border-t border-slate-800 flex items-center justify-between flex-row-reverse text-xs">
-                    <span class="text-slate-400 font-semibold">:RAGE ART (R2)</span>
-                    <span id="p2-select-special" class="text-amber-300 font-arcade font-bold">🐉 Supreme Dragon Overdrive</span>
+                    <div class="mt-2 pt-1.5 border-t border-slate-800 flex items-center justify-between flex-row-reverse text-xs">
+                        <span class="text-slate-400 font-semibold">:RAGE ART (R2)</span>
+                        <span id="p2-select-special" class="text-amber-300 font-arcade font-bold">🐉 Supreme Dragon Overdrive</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -844,9 +882,9 @@
                 gender: 'boy',
                 title: '"The Pixel Blaster Hero"',
                 style: 'Arcade Gun-Kata & Rushdown',
-                specialName: '☄️ Hyper Cannon Barrage',
-                desc: 'Fiery red-and-black spiky-haired arcade hero equipped with dual wrist-blasters and high-score combo finishers.',
-                quote: '"Insert coin! Ready Player One—here comes the ultimate combo!"',
+                specialName: '☄️ Shooting Kyoma Overdrive',
+                desc: 'Fiery red-and-black spiky-haired arcade hero with a retro cyber visor and dual wrist-blasters.',
+                quote: '"Insert coin! Ready Player One—Shooting Kyoma Overdrive!"',
                 stats: { power: 88, speed: 92, range: 94 },
                 colors: { skin: 0xffd5b8, hair: 0xef4444, top: 0x18181b, trim: 0x22c55e, pants: 0x27272a, gloves: 0xef4444, aura: 0x10b981 },
                 scale: { x: 1.0, y: 1.0, z: 1.0 }
@@ -924,16 +962,18 @@
                 this.rageTempoBoost = false;
             }
             init() {
-                if (!this.ctx) {
-                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                    if (AudioCtx) this.ctx = new AudioCtx();
-                }
-                if (this.ctx && this.ctx.state === 'suspended') {
-                    this.ctx.resume();
-                }
-                if (this.bgmEnabled && !this.bgmPlaying) {
-                    this.startBGM();
-                }
+                try {
+                    if (!this.ctx) {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtx) this.ctx = new AudioCtx();
+                    }
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume().catch(() => {});
+                    }
+                    if (this.bgmEnabled && !this.bgmPlaying) {
+                        this.startBGM();
+                    }
+                } catch (e) {}
             }
             startBGM() {
                 if (!this.ctx || !this.bgmEnabled) return;
@@ -980,73 +1020,75 @@
                 this.bgmTimer = setTimeout(() => this.scheduleNextBGMStep(), stepDur * 1000);
             }
             playBGMStep(track, step, dur) {
-                if (this.muted || !this.ctx) return;
-                const now = this.ctx.currentTime;
+                if (this.muted || !this.ctx || this.ctx.state !== 'running') return;
+                try {
+                    const now = this.ctx.currentTime;
 
-                // 1. Electronic Kick Drum on 0, 4, 8, 12 (plus syncopation on 14)
-                if (step % 4 === 0 || step === 14) {
-                    const kOsc = this.ctx.createOscillator();
-                    const kGain = this.ctx.createGain();
-                    kOsc.type = 'sine';
-                    kOsc.frequency.setValueAtTime(125, now);
-                    kOsc.frequency.exponentialRampToValueAtTime(32, now + 0.11);
-                    kGain.gain.setValueAtTime(0.16, now);
-                    kGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-                    kOsc.connect(kGain);
-                    kGain.connect(this.ctx.destination);
-                    kOsc.start(now);
-                    kOsc.stop(now + 0.12);
-                }
+                    // 1. Electronic Kick Drum on 0, 4, 8, 12 (plus syncopation on 14)
+                    if (step % 4 === 0 || step === 14) {
+                        const kOsc = this.ctx.createOscillator();
+                        const kGain = this.ctx.createGain();
+                        kOsc.type = 'sine';
+                        kOsc.frequency.setValueAtTime(125, now);
+                        kOsc.frequency.exponentialRampToValueAtTime(32, now + 0.11);
+                        kGain.gain.setValueAtTime(0.16, now);
+                        kGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                        kOsc.connect(kGain);
+                        kGain.connect(this.ctx.destination);
+                        kOsc.start(now);
+                        kOsc.stop(now + 0.12);
+                    }
 
-                // 2. Crisp Hi-Hat / Snare pulse on off-beats
-                if (step % 2 === 1 || step === 4 || step === 12) {
-                    const isSnare = (step === 4 || step === 12);
-                    const hOsc = this.ctx.createOscillator();
-                    const hGain = this.ctx.createGain();
-                    hOsc.type = isSnare ? 'triangle' : 'square';
-                    hOsc.frequency.setValueAtTime(isSnare ? 240 : 4200, now);
-                    hOsc.frequency.exponentialRampToValueAtTime(isSnare ? 85 : 1800, now + (isSnare ? 0.08 : 0.03));
-                    hGain.gain.setValueAtTime(isSnare ? 0.08 : 0.02, now);
-                    hGain.gain.exponentialRampToValueAtTime(0.001, now + (isSnare ? 0.08 : 0.03));
-                    hOsc.connect(hGain);
-                    hGain.connect(this.ctx.destination);
-                    hOsc.start(now);
-                    hOsc.stop(now + 0.09);
-                }
+                    // 2. Crisp Hi-Hat / Snare pulse on off-beats
+                    if (step % 2 === 1 || step === 4 || step === 12) {
+                        const isSnare = (step === 4 || step === 12);
+                        const hOsc = this.ctx.createOscillator();
+                        const hGain = this.ctx.createGain();
+                        hOsc.type = isSnare ? 'triangle' : 'square';
+                        hOsc.frequency.setValueAtTime(isSnare ? 240 : 4200, now);
+                        hOsc.frequency.exponentialRampToValueAtTime(isSnare ? 85 : 1800, now + (isSnare ? 0.08 : 0.03));
+                        hGain.gain.setValueAtTime(isSnare ? 0.08 : 0.02, now);
+                        hGain.gain.exponentialRampToValueAtTime(0.001, now + (isSnare ? 0.08 : 0.03));
+                        hOsc.connect(hGain);
+                        hGain.connect(this.ctx.destination);
+                        hOsc.start(now);
+                        hOsc.stop(now + 0.09);
+                    }
 
-                // 3. Driving Synth Bassline (every 2 steps)
-                const bassFreq = track.bass[Math.floor(step / 2) % track.bass.length];
-                if (bassFreq > 0 && step % 2 === 0) {
-                    const bOsc = this.ctx.createOscillator();
-                    const bFilter = this.ctx.createBiquadFilter();
-                    const bGain = this.ctx.createGain();
-                    bOsc.type = 'sawtooth';
-                    bOsc.frequency.setValueAtTime(bassFreq, now);
-                    bFilter.type = 'lowpass';
-                    bFilter.frequency.setValueAtTime(380, now);
-                    bGain.gain.setValueAtTime(0.09, now);
-                    bGain.gain.exponentialRampToValueAtTime(0.005, now + dur * 1.8);
-                    bOsc.connect(bFilter);
-                    bFilter.connect(bGain);
-                    bGain.connect(this.ctx.destination);
-                    bOsc.start(now);
-                    bOsc.stop(now + dur * 1.9);
-                }
+                    // 3. Driving Synth Bassline (every 2 steps)
+                    const bassFreq = track.bass[Math.floor(step / 2) % track.bass.length];
+                    if (bassFreq > 0 && step % 2 === 0) {
+                        const bOsc = this.ctx.createOscillator();
+                        const bFilter = this.ctx.createBiquadFilter();
+                        const bGain = this.ctx.createGain();
+                        bOsc.type = 'sawtooth';
+                        bOsc.frequency.setValueAtTime(bassFreq, now);
+                        bFilter.type = 'lowpass';
+                        bFilter.frequency.setValueAtTime(380, now);
+                        bGain.gain.setValueAtTime(0.09, now);
+                        bGain.gain.exponentialRampToValueAtTime(0.005, now + dur * 1.8);
+                        bOsc.connect(bFilter);
+                        bFilter.connect(bGain);
+                        bGain.connect(this.ctx.destination);
+                        bOsc.start(now);
+                        bOsc.stop(now + dur * 1.9);
+                    }
 
-                // 4. Arpeggiated Arcade Lead Synth
-                const leadFreq = track.lead[step % track.lead.length];
-                if (leadFreq > 0) {
-                    const lOsc = this.ctx.createOscillator();
-                    const lGain = this.ctx.createGain();
-                    lOsc.type = track.wave;
-                    lOsc.frequency.setValueAtTime(leadFreq, now);
-                    lGain.gain.setValueAtTime(0.045, now);
-                    lGain.gain.exponentialRampToValueAtTime(0.002, now + dur * 0.92);
-                    lOsc.connect(lGain);
-                    lGain.connect(this.ctx.destination);
-                    lOsc.start(now);
-                    lOsc.stop(now + dur);
-                }
+                    // 4. Arpeggiated Arcade Lead Synth
+                    const leadFreq = track.lead[step % track.lead.length];
+                    if (leadFreq > 0) {
+                        const lOsc = this.ctx.createOscillator();
+                        const lGain = this.ctx.createGain();
+                        lOsc.type = track.wave;
+                        lOsc.frequency.setValueAtTime(leadFreq, now);
+                        lGain.gain.setValueAtTime(0.045, now);
+                        lGain.gain.exponentialRampToValueAtTime(0.002, now + dur * 0.92);
+                        lOsc.connect(lGain);
+                        lGain.connect(this.ctx.destination);
+                        lOsc.start(now);
+                        lOsc.stop(now + dur);
+                    }
+                } catch (e) {}
             }
             announce(text, pitch = 0.85, rate = 1.02) {
                 if (this.muted || !('speechSynthesis' in window)) return;
@@ -1062,110 +1104,120 @@
             playHit(type = 'light') {
                 this.init();
                 if (!this.ctx || this.muted) return;
-                const now = this.ctx.currentTime;
+                try {
+                    const now = this.ctx.currentTime;
 
-                // Impact sub-bass thump
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = type === 'heavy' || type === 'special' ? 'sawtooth' : 'triangle';
-                const startFreq = type === 'special' ? 240 : (type === 'heavy' ? 160 : 120);
-                osc.frequency.setValueAtTime(startFreq, now);
-                osc.frequency.exponentialRampToValueAtTime(28, now + (type === 'heavy' ? 0.22 : 0.12));
+                    // Impact sub-bass thump
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type === 'heavy' || type === 'special' ? 'sawtooth' : 'triangle';
+                    const startFreq = type === 'special' ? 240 : (type === 'heavy' ? 160 : 120);
+                    osc.frequency.setValueAtTime(startFreq, now);
+                    osc.frequency.exponentialRampToValueAtTime(28, now + (type === 'heavy' ? 0.22 : 0.12));
 
-                gain.gain.setValueAtTime(type === 'heavy' ? 0.55 : 0.35, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + (type === 'heavy' ? 0.24 : 0.13));
+                    gain.gain.setValueAtTime(type === 'heavy' ? 0.55 : 0.35, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (type === 'heavy' ? 0.24 : 0.13));
 
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
 
-                // White noise crunch
-                const bufferSize = this.ctx.sampleRate * (type === 'heavy' ? 0.16 : 0.08);
-                const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-                const output = noiseBuffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    output[i] = Math.random() * 2 - 1;
-                }
-                const whiteNoise = this.ctx.createBufferSource();
-                whiteNoise.buffer = noiseBuffer;
+                    // White noise crunch
+                    const bufferSize = Math.floor(this.ctx.sampleRate * (type === 'heavy' ? 0.16 : 0.08));
+                    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = Math.random() * 2 - 1;
+                    }
+                    const whiteNoise = this.ctx.createBufferSource();
+                    whiteNoise.buffer = noiseBuffer;
 
-                const filter = this.ctx.createBiquadFilter();
-                filter.type = 'bandpass';
-                filter.frequency.value = type === 'special' ? 1400 : 900;
+                    const filter = this.ctx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.value = type === 'special' ? 1400 : 900;
 
-                const nGain = this.ctx.createGain();
-                nGain.gain.setValueAtTime(type === 'heavy' ? 0.45 : 0.25, now);
-                nGain.gain.exponentialRampToValueAtTime(0.01, now + (type === 'heavy' ? 0.16 : 0.08));
+                    const nGain = this.ctx.createGain();
+                    nGain.gain.setValueAtTime(type === 'heavy' ? 0.45 : 0.25, now);
+                    nGain.gain.exponentialRampToValueAtTime(0.01, now + (type === 'heavy' ? 0.16 : 0.08));
 
-                whiteNoise.connect(filter);
-                filter.connect(nGain);
-                nGain.connect(this.ctx.destination);
-                whiteNoise.start(now);
+                    whiteNoise.connect(filter);
+                    filter.connect(nGain);
+                    nGain.connect(this.ctx.destination);
+                    whiteNoise.start(now);
+                } catch (e) {}
             }
             playBlock() {
                 this.init();
                 if (!this.ctx || this.muted) return;
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(520, now);
-                osc.frequency.exponentialRampToValueAtTime(180, now + 0.09);
-                gain.gain.setValueAtTime(0.25, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.1);
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(180, now + 0.09);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } catch (e) {}
             }
             playWhoosh() {
                 this.init();
                 if (!this.ctx || this.muted) return;
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(280, now);
-                osc.frequency.exponentialRampToValueAtTime(70, now + 0.11);
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.12);
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(280, now);
+                    osc.frequency.exponentialRampToValueAtTime(70, now + 0.11);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } catch (e) {}
             }
             playRageActivation() {
                 this.init();
                 if (!this.ctx || this.muted) return;
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(90, now);
-                osc.frequency.exponentialRampToValueAtTime(620, now + 0.45);
-                gain.gain.setValueAtTime(0.45, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.48);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.5);
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(90, now);
+                    osc.frequency.exponentialRampToValueAtTime(620, now + 0.45);
+                    gain.gain.setValueAtTime(0.45, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.48);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.5);
+                } catch (e) {}
             }
             playUIClick() {
                 this.init();
                 if (!this.ctx || this.muted) return;
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(660, now);
-                osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
-                gain.gain.setValueAtTime(0.15, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.06);
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(660, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                } catch (e) {}
             }
         }
         const sfx = new SoundEngine();
@@ -1224,6 +1276,62 @@
         const rimLightRight = new THREE.PointLight(0xff0055, 2.2, 22);
         rimLightRight.position.set(8, 5, -3);
         scene.add(rimLightRight);
+
+        // Live 3D Character Select Showcase Pedestals (Left = P1, Right = P2)
+        const selectPedestalGroup = new THREE.Group();
+        scene.add(selectPedestalGroup);
+        let p1PedestalRingMat = null;
+        let p2PedestalRingMat = null;
+        let p1PedestalBeamMat = null;
+        let p2PedestalBeamMat = null;
+
+        function buildSelectPedestals() {
+            while (selectPedestalGroup.children.length > 0) {
+                selectPedestalGroup.remove(selectPedestalGroup.children[0]);
+            }
+            const makePedestal = (xPos, colorHex) => {
+                const g = new THREE.Group();
+                g.position.set(xPos, 0, 0);
+
+                // Tiered Metallic Cyber-Dojo Platform
+                const base = new THREE.Mesh(
+                    new THREE.CylinderGeometry(1.35, 1.55, 0.22, 24),
+                    new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.25, metalness: 0.8 })
+                );
+                base.position.y = 0.11;
+                base.receiveShadow = true;
+                g.add(base);
+
+                // Glowing Elemental Rim Ring
+                const ringMat = new THREE.MeshBasicMaterial({ color: colorHex, side: THREE.DoubleSide });
+                const ring = new THREE.Mesh(new THREE.RingGeometry(1.22, 1.38, 32), ringMat);
+                ring.rotation.x = -Math.PI / 2;
+                ring.position.y = 0.23;
+                g.add(ring);
+
+                // Vertical Holographic Spotlight Beam
+                const beamMat = new THREE.MeshBasicMaterial({
+                    color: colorHex,
+                    transparent: true,
+                    opacity: 0.12,
+                    side: THREE.DoubleSide
+                });
+                const beam = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.25, 3.8, 20, 1, true), beamMat);
+                beam.position.y = 2.1;
+                g.add(beam);
+
+                selectPedestalGroup.add(g);
+                return { g, ringMat, beamMat };
+            };
+
+            const ped1 = makePedestal(-2.35, 0x00e5ff);
+            const ped2 = makePedestal(2.35, 0xff2e93);
+            p1PedestalRingMat = ped1.ringMat;
+            p1PedestalBeamMat = ped1.beamMat;
+            p2PedestalRingMat = ped2.ringMat;
+            p2PedestalBeamMat = ped2.beamMat;
+        }
+        buildSelectPedestals();
 
         // Arena Group
         const arenaGroup = new THREE.Group();
@@ -1474,6 +1582,12 @@
                     const bandana = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.07, 0.39), trimMat);
                     bandana.position.y = 0.11;
                     head.add(bandana);
+                }
+                if (id === 'kyoma') {
+                    // Kyoma's Retro Arcade Headset & Cyber Visor
+                    const visor = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.09, 0.39), trimMat);
+                    visor.position.set(0.18, 0.05, 0);
+                    head.add(visor);
                 }
                 if (id === 'haruaki') {
                     // Floating Golden Solar Prayer Beads around shoulders
@@ -2525,14 +2639,39 @@
                 p1CharIdx = charIdx;
                 p1.setCharacter(charIdx);
                 p1.resetForRound();
+                p1.previewYawOffset = 0;
+                if (p1PedestalRingMat) p1PedestalRingMat.color.setHex(FIGHTERS[charIdx].colors.aura);
+                if (p1PedestalBeamMat) p1PedestalBeamMat.color.setHex(FIGHTERS[charIdx].colors.aura);
+                triggerPreviewPose(1, 'hp');
                 sfx.announce(FIGHTERS[charIdx].name);
             } else {
                 p2CharIdx = charIdx;
                 p2.setCharacter(charIdx);
                 p2.resetForRound();
+                p2.previewYawOffset = 0;
+                if (p2PedestalRingMat) p2PedestalRingMat.color.setHex(FIGHTERS[charIdx].colors.aura);
+                if (p2PedestalBeamMat) p2PedestalBeamMat.color.setHex(FIGHTERS[charIdx].colors.aura);
+                triggerPreviewPose(2, 'hp');
                 sfx.announce(FIGHTERS[charIdx].name);
             }
             renderRosterGrid();
+        }
+
+        function triggerPreviewPose(playerNum, moveKey = 'special') {
+            const f = playerNum === 1 ? p1 : p2;
+            f.state = 'attack';
+            f.currentMove = moveKey;
+            f.moveTimer = 0;
+            f.moveHasHit = true; // Prevent hitbox checks during menu preview
+            spawnShockwaveRing(f.x, f.y + 1.1, 0.2, f.data.colors.aura, 2.2);
+            spawnHitSparks(f.x, f.y + 1.3, 0.3, f.data.colors.aura, 18, 1.1);
+            sfx.playWhoosh();
+        }
+
+        function rotatePreviewModel(playerNum) {
+            const f = playerNum === 1 ? p1 : p2;
+            f.previewYawOffset = ((f.previewYawOffset || 0) + Math.PI / 2) % (Math.PI * 2);
+            sfx.playUIClick();
         }
 
         function selectCharacterByStep(playerNum, delta) {
@@ -2653,6 +2792,7 @@
             if (sfx.bgmTrackIdx === 0) {
                 sfx.setBGMTrack(selectedStage === 1 || p2.data.id === 'tkoi' ? 2 : 1);
             }
+            selectPedestalGroup.visible = false;
             document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('victory-modal').classList.add('hidden');
             const hud = document.getElementById('fight-hud');
@@ -2739,6 +2879,7 @@
             sfx.rageTempoBoost = false;
             sfx.setBGMTrack(0);
             gameState = 'menu';
+            selectPedestalGroup.visible = true;
             document.getElementById('victory-modal').classList.add('hidden');
             document.getElementById('fight-hud').classList.add('hidden');
             document.getElementById('fight-hud').classList.remove('flex');
@@ -2862,16 +3003,39 @@
             const dt = rawDt * slowMoFactor;
 
             if (gameState === 'menu') {
-                // Menu Idle Preview Pose & Subtle Turntable Camera
-                p1.animTime += dt;
-                p2.animTime += dt;
-                animateFighterRig(p1, dt);
-                animateFighterRig(p2, dt);
-                camera.position.x = Math.sin(now * 0.0005) * 1.2;
-                camera.position.y = 2.45;
-                camera.position.z = 6.8;
-                camera.lookAt(0, 1.4, 0);
+                // Live 3D Character Selection Pedestal Preview Stage
+                selectPedestalGroup.visible = true;
+                [p1, p2].forEach((f, idx) => {
+                    const isP1 = idx === 0;
+                    f.x = isP1 ? -2.35 : 2.35;
+                    f.y = 0.22; // Stand atop the 3D Elemental Showcase Pedestal
+                    f.animTime += dt;
+
+                    // Advance signature entrance/pose animation if active
+                    if (f.state === 'attack' && f.currentMove) {
+                        const move = MOVE_DATA[f.currentMove] || MOVE_DATA.hp;
+                        f.moveTimer += dt;
+                        if (f.moveTimer >= (move.startup + move.active + move.recovery)) {
+                            f.state = 'idle';
+                            f.currentMove = null;
+                        }
+                    }
+
+                    f.rig.root.position.set(f.x, f.y, 0);
+                    // Angle models slightly toward the camera and opponent so players see full 3D detail
+                    const baseAngle = isP1 ? 0.55 : (Math.PI - 0.55);
+                    const slowTurntable = Math.sin(now * 0.0012 + idx * 2) * 0.22;
+                    f.rig.root.rotation.y = baseAngle + slowTurntable + (f.previewYawOffset || 0);
+
+                    animateFighterRig(f, dt);
+                });
+
+                camera.position.x = Math.sin(now * 0.0004) * 0.35;
+                camera.position.y = 2.05;
+                camera.position.z = 6.35;
+                camera.lookAt(0, 1.35, 0);
             } else if (gameState === 'intro' || gameState === 'fight' || gameState === 'ko' || gameState === 'victory') {
+                selectPedestalGroup.visible = false;
                 if (gameState === 'fight') {
                     // Round Countdown Timer
                     if (gameMode !== 'practice') {
