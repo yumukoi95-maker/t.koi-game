@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IRON FIST: OVERDRIVE — 3D Martial Arts Fighter (by T.Koi)</title>
+    <title>T.Koi Fighter!! — 3D Martial Arts Fighter (by T.Koi)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
@@ -133,7 +133,7 @@
     <!-- Subtle Watermark -->
     <div class="fixed bottom-2 right-3 z-50 pointer-events-none flex items-center gap-2 opacity-75">
         <span class="text-xs md:text-sm font-arcade tracking-widest text-amber-400/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-            IRON FIST ENGINE <span class="text-white font-bold">(by T.Koi)</span>
+            T.KOI FIGHTER!! <span class="text-white font-bold">(by T.Koi)</span>
         </span>
     </div>
 
@@ -168,11 +168,11 @@
         <div class="max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 text-[10px] font-arcade bg-gradient-to-r from-amber-500 to-red-600 text-black font-black rounded tracking-wider">AAA 3D FIGHTER</span>
+                    <span class="px-2 py-0.5 text-[10px] font-arcade bg-gradient-to-r from-amber-500 to-red-600 text-black font-black rounded tracking-wider">AAA 3D FIGHTER (by T.Koi)</span>
                     <span class="text-xs text-cyan-400 font-semibold tracking-widest uppercase">PS5 DualSense Ready • 60FPS WebGL</span>
                 </div>
                 <h1 class="text-2xl sm:text-4xl md:text-5xl font-arcade font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-amber-400 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
-                    IRON FIST: OVERDRIVE
+                    T.Koi Fighter!!
                 </h1>
             </div>
 
@@ -502,7 +502,7 @@
     <!-- ========================================== -->
     <div id="victory-modal" class="ui-layer hidden interactive bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 z-30">
         <div class="max-w-md w-full bg-slate-900 border-2 border-amber-400/80 rounded-2xl p-6 text-center shadow-[0_0_50px_rgba(245,158,11,0.4)]">
-            <div class="text-xs font-arcade text-amber-400 tracking-widest uppercase">KING OF IRON FIST TOURNAMENT</div>
+            <div class="text-xs font-arcade text-amber-400 tracking-widest uppercase">T.KOI FIGHTER!! GRAND TOURNAMENT</div>
             <h2 id="victory-winner-name" class="text-4xl font-arcade font-black text-white mt-1">T.KOI WINS!</h2>
             <p id="victory-winner-quote" class="text-sm text-slate-300 italic mt-2">"True martial mastery transcends lightning itself."</p>
 
@@ -627,22 +627,22 @@
                 id: 'fuki',
                 name: 'FUKI',
                 gender: 'girl',
-                title: '"The Phantom Tempest"',
-                style: 'Acrobatic Wind Shinobi',
-                specialName: '🌪️ Hurricane Lotus Kick',
-                desc: 'Ultra-fast kickboxer and wind ninja with flowing emerald twin-tails and razor-sharp cyclone kicks.',
-                quote: '"You cannot hit what moves faster than the wind!"',
-                stats: { power: 76, speed: 99, range: 85 },
+                title: '"The Jade Kung-Fu Empress"',
+                style: 'Heavenly Dragon Kung-Fu',
+                specialName: '🐉 Spinning Phoenix Kick',
+                desc: 'Stylish Kung-Fu prodigy in a royal jade & gold silk Qipao with twin ox-horn hair buns, golden wrist bangles, and lightning-fast lotus kicks.',
+                quote: '"Grace like flowing silk, strikes like a heavenly dragon!"',
+                stats: { power: 82, speed: 100, range: 88 },
                 colors: {
-                    skin: 0xffe0c8,
-                    hair: 0x10b981,
-                    top: 0x064e3b,
-                    trim: 0x34d399,
-                    pants: 0x0f172a,
-                    gloves: 0x059669,
-                    aura: 0x10b981
+                    skin: 0xffe5d4,
+                    hair: 0x160f1a,
+                    top: 0x059669,
+                    trim: 0xfbbf24,
+                    pants: 0x1e1b2e,
+                    gloves: 0xf59e0b,
+                    aura: 0x34d399
                 },
-                scale: { x: 0.92, y: 0.97, z: 0.92 }
+                scale: { x: 0.94, y: 0.98, z: 0.94 }
             },
             {
                 id: 'hanami',
@@ -999,47 +999,127 @@
             hips.position.y = 1.05;
             root.add(hips);
 
-            const pelvisMesh = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.26, 0.34), pantsMat);
+            const isFuki = charData.id === 'fuki';
+            const isFemale = charData.gender === 'girl';
+            const pelvisWidth = isFuki ? 0.48 : 0.52;
+            const pelvisMesh = new THREE.Mesh(new THREE.BoxGeometry(pelvisWidth, 0.26, 0.33), isFuki ? topMat : pantsMat);
             pelvisMesh.castShadow = true;
             hips.add(pelvisMesh);
 
             // Glowing Martial Belt / Sash
-            const beltMesh = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.1, 0.38), trimMat);
+            const beltMesh = new THREE.Mesh(new THREE.BoxGeometry(pelvisWidth + 0.04, 0.1, 0.37), trimMat);
             beltMesh.position.y = 0.08;
             hips.add(beltMesh);
+
+            // Fuki's Flowing Qipao / Cheongsam Side-Slit Skirt Panels & Gold Sash Ribbon
+            if (isFuki) {
+                const frontPanel = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.48, 0.30), topMat);
+                frontPanel.position.set(0.24, -0.18, 0);
+                frontPanel.rotation.z = 0.12;
+                const frontTrim = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.49, 0.32), trimMat);
+                frontTrim.position.set(0.235, -0.18, 0);
+                frontTrim.rotation.z = 0.12;
+
+                const backPanel = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.48, 0.30), topMat);
+                backPanel.position.set(-0.24, -0.18, 0);
+                backPanel.rotation.z = -0.14;
+                const backTrim = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.49, 0.32), trimMat);
+                backTrim.position.set(-0.235, -0.18, 0);
+                backTrim.rotation.z = -0.14;
+
+                // Gold silk waist bow knot
+                const sashBow = new THREE.Mesh(new THREE.OctahedronGeometry(0.11, 0), trimMat);
+                sashBow.position.set(0.27, 0.08, 0);
+                hips.add(frontTrim, frontPanel, backTrim, backPanel, sashBow);
+            }
 
             // Torso / Chest
             const torso = new THREE.Group();
             torso.position.y = 0.15;
             hips.add(torso);
 
-            const chestWidth = charData.id === 'tkoi' ? 0.68 : (charData.id === 'fumio' ? 0.64 : 0.54);
-            const chestMesh = new THREE.Mesh(new THREE.BoxGeometry(chestWidth, 0.68, 0.36), topMat);
-            chestMesh.position.y = 0.34;
-            chestMesh.castShadow = true;
-            torso.add(chestMesh);
+            const chestWidth = charData.id === 'tkoi' ? 0.68 : (charData.id === 'fumio' ? 0.64 : (isFemale ? 0.46 : 0.54));
+            if (isFuki) {
+                // Feminine Hourglass Qipao Bodice with Mandarin Collar & Puffy Cap Sleeves
+                const waistMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.20, 0.34, 12), topMat);
+                waistMesh.position.y = 0.17;
+                waistMesh.castShadow = true;
+                torso.add(waistMesh);
 
-            // Glowing V-Trim / Emblem on Chest
-            const emblemMesh = new THREE.Mesh(new THREE.BoxGeometry(chestWidth * 0.6, 0.5, 0.38), trimMat);
-            emblemMesh.position.y = 0.36;
-            torso.add(emblemMesh);
+                const upperBodice = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.23, 0.38, 12), topMat);
+                upperBodice.position.y = 0.48;
+                upperBodice.castShadow = true;
+                torso.add(upperBodice);
+
+                // Feminine bust contour & gold Qipao piping
+                const bustContour = new THREE.Mesh(new THREE.SphereGeometry(0.19, 12, 10), topMat);
+                bustContour.scale.set(0.95, 0.78, 1.25);
+                bustContour.position.set(0.11, 0.47, 0);
+                torso.add(bustContour);
+
+                // Ornate gold Qipao front chest Lapel & Mandarin Collar
+                const qipaoTrim = new THREE.Mesh(new THREE.CylinderGeometry(0.268, 0.235, 0.34, 12, 1, false, -0.6, 1.2), trimMat);
+                qipaoTrim.position.y = 0.48;
+                torso.add(qipaoTrim);
+
+                const mandarinCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.14, 0.12, 12), trimMat);
+                mandarinCollar.position.y = 0.70;
+                torso.add(mandarinCollar);
+            } else {
+                const chestMesh = new THREE.Mesh(new THREE.BoxGeometry(chestWidth, 0.68, 0.36), topMat);
+                chestMesh.position.y = 0.34;
+                chestMesh.castShadow = true;
+                torso.add(chestMesh);
+
+                // Glowing V-Trim / Emblem on Chest
+                const emblemMesh = new THREE.Mesh(new THREE.BoxGeometry(chestWidth * 0.6, 0.5, 0.38), trimMat);
+                emblemMesh.position.y = 0.36;
+                torso.add(emblemMesh);
+            }
 
             // Head & Hair Group
             const head = new THREE.Group();
             head.position.y = 0.82;
             torso.add(head);
 
-            const skull = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.38, 0.36), skinMat);
-            skull.castShadow = true;
-            head.add(skull);
+            if (isFuki) {
+                // Soft sculpted feminine face
+                const femHead = new THREE.Mesh(new THREE.SphereGeometry(0.21, 16, 16), skinMat);
+                femHead.scale.set(0.95, 1.04, 0.92);
+                femHead.castShadow = true;
+                head.add(femHead);
 
-            // Glowing Eyes (Facing +X in local fighter space)
-            const eyeMat = new THREE.MeshBasicMaterial({ color: charData.id === 'tkoi' ? 0xffd700 : 0xffffff });
-            const leftEye = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, 0.07), eyeMat);
-            leftEye.position.set(0.17, 0.04, 0.09);
-            const rightEye = leftEye.clone();
-            rightEye.position.z = -0.09;
-            head.add(leftEye, rightEye);
+                // Expressive Eyes + Dark Eyelashes + Rosy Blush Cheeks
+                const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+                const irisMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+                const lashMat = new THREE.MeshBasicMaterial({ color: 0x09050d });
+                const blushMat = new THREE.MeshBasicMaterial({ color: 0xff7eb6, transparent: true, opacity: 0.55 });
+
+                [-0.085, 0.085].forEach(zPos => {
+                    const eyeW = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.055, 0.065), eyeWhiteMat);
+                    eyeW.position.set(0.18, 0.03, zPos);
+                    const iris = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.045, 0.042), irisMat);
+                    iris.position.set(0.185, 0.03, zPos);
+                    const lash = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.016, 0.075), lashMat);
+                    lash.position.set(0.186, 0.065, zPos);
+                    lash.rotation.x = zPos > 0 ? -0.18 : 0.18;
+                    const blush = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.03, 0.05), blushMat);
+                    blush.position.set(0.18, -0.03, zPos * 1.25);
+                    head.add(eyeW, iris, lash, blush);
+                });
+            } else {
+                const skull = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.38, 0.36), skinMat);
+                skull.castShadow = true;
+                head.add(skull);
+
+                // Glowing Eyes (Facing +X in local fighter space)
+                const eyeMat = new THREE.MeshBasicMaterial({ color: charData.id === 'tkoi' ? 0xffd700 : 0xffffff });
+                const leftEye = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, 0.07), eyeMat);
+                leftEye.position.set(0.17, 0.04, 0.09);
+                const rightEye = leftEye.clone();
+                rightEye.position.z = -0.09;
+                head.add(leftEye, rightEye);
+            }
 
             // Distinct Hair / Accessories per Character
             if (charData.id === 'aisei' || charData.id === 'yayoi' || charData.id === 'tkoi') {
@@ -1062,15 +1142,36 @@
                 tail.rotation.z = 0.3;
                 head.add(hairTop, band, tail);
             } else if (charData.id === 'fuki') {
-                // Twin Flowing Ponytails
-                const hairCap = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.18, 0.39), hairMat);
-                hairCap.position.y = 0.16;
-                const tailL = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.55, 6), hairMat);
-                tailL.position.set(-0.22, 0.05, 0.18);
-                tailL.rotation.z = -0.7;
-                const tailR = tailL.clone();
-                tailR.position.z = -0.18;
-                head.add(hairCap, tailL, tailR);
+                // Iconic Kung-Fu Girl Double Ox-Horn Hair Buns (Odango) + Gold BrocadeCovers & Flowing Silk Ribbons
+                const hairDome = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 14), hairMat);
+                hairDome.position.set(-0.02, 0.05, 0);
+                head.add(hairDome);
+
+                // Sleek Front Bangs & Side Cheek Locks framing face
+                const bangs = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.11, 0.32), hairMat);
+                bangs.position.set(0.15, 0.14, 0);
+                bangs.rotation.z = -0.25;
+                head.add(bangs);
+
+                const ribbonMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
+                [-0.20, 0.20].forEach(zSide => {
+                    // High Double Kung-Fu Bun
+                    const bun = new THREE.Mesh(new THREE.SphereGeometry(0.125, 12, 12), hairMat);
+                    bun.position.set(-0.05, 0.23, zSide);
+                    // Ornate Gold & Jade Brocade Bun Ring
+                    const bunRing = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.06, 12), trimMat);
+                    bunRing.position.set(-0.05, 0.21, zSide);
+                    bunRing.rotation.x = zSide > 0 ? 0.4 : -0.4;
+                    // Flowing Silk Tassel Ribbons hanging from each bun
+                    const ribbon = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.03), ribbonMat);
+                    ribbon.position.set(-0.14, -0.02, zSide * 1.15);
+                    ribbon.rotation.z = -0.28;
+                    // Side hair framing lock
+                    const sideLock = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.26, 6), hairMat);
+                    sideLock.position.set(0.12, -0.06, zSide * 0.92);
+                    sideLock.rotation.x = Math.PI;
+                    head.add(bun, bunRing, ribbon, sideLock);
+                });
             } else if (charData.id === 'hanami') {
                 // Sakura Bun + Gold Hairpiece
                 const hairCap = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.2, 0.39), hairMat);
@@ -1093,7 +1194,39 @@
             // Articulated Arms (Shoulder -> Arm -> Glowing Fist)
             function buildArm(isLeft) {
                 const shoulder = new THREE.Group();
-                shoulder.position.set(0, 0.58, isLeft ? 0.34 : -0.34);
+                const zOff = isFuki ? 0.29 : 0.34;
+                shoulder.position.set(0, 0.58, isLeft ? zOff : -zOff);
+
+                if (isFuki) {
+                    // Stylish Puffy Qipao Cap Sleeve with Gold Trim
+                    const capSleeve = new THREE.Mesh(new THREE.SphereGeometry(0.135, 10, 10), topMat);
+                    capSleeve.position.y = -0.02;
+                    shoulder.add(capSleeve);
+
+                    const sleeveCuff = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.04, 10), trimMat);
+                    sleeveCuff.position.y = -0.09;
+                    shoulder.add(sleeveCuff);
+
+                    // Slender Feminine Arm
+                    const slenderArm = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.068, 0.42, 10), skinMat);
+                    slenderArm.position.y = -0.22;
+                    slenderArm.castShadow = true;
+                    shoulder.add(slenderArm);
+
+                    // Heavy Golden Kung-Fu Wrist Bangle Bracelet (Chun-Li inspired)
+                    const bangle = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.09, 12), trimMat);
+                    bangle.position.y = -0.38;
+                    shoulder.add(bangle);
+
+                    // Graceful Kung-Fu Open Palm / Martial Glove
+                    const fist = new THREE.Mesh(new THREE.SphereGeometry(0.115, 10, 10), gloveMat);
+                    fist.scale.set(1.1, 1.25, 0.85);
+                    fist.position.y = -0.46;
+                    fist.castShadow = true;
+                    shoulder.add(fist);
+                    return { shoulder, fist };
+                }
+
                 const upperArm = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.45, 0.22), skinMat);
                 upperArm.position.y = -0.18;
                 upperArm.castShadow = true;
@@ -1113,7 +1246,31 @@
             // Articulated Legs (Hip -> Leg -> Boot)
             function buildLeg(isLeft) {
                 const hipJoint = new THREE.Group();
-                hipJoint.position.set(0, -0.1, isLeft ? 0.15 : -0.15);
+                hipJoint.position.set(0, -0.1, isLeft ? 0.14 : -0.14);
+
+                if (isFuki) {
+                    // Athletic Silk Kung-Fu Tights + White & Gold Traditional Lace-Up Kung-Fu Boots
+                    const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.085, 0.56, 12), pantsMat);
+                    thigh.position.y = -0.28;
+                    thigh.castShadow = true;
+                    hipJoint.add(thigh);
+
+                    const whiteBootMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3, metalness: 0.2 });
+                    const bootCuff = new THREE.Mesh(new THREE.CylinderGeometry(0.098, 0.09, 0.22, 12), whiteBootMat);
+                    bootCuff.position.y = -0.50;
+                    hipJoint.add(bootCuff);
+
+                    const goldRibbon = new THREE.Mesh(new THREE.CylinderGeometry(0.102, 0.102, 0.04, 12), trimMat);
+                    goldRibbon.position.y = -0.41;
+                    hipJoint.add(goldRibbon);
+
+                    const boot = new THREE.Mesh(new THREE.BoxGeometry(0.33, 0.18, 0.22), whiteBootMat);
+                    boot.position.set(0.05, -0.63, 0);
+                    boot.castShadow = true;
+                    hipJoint.add(boot);
+                    return { hipJoint, boot };
+                }
+
                 const thigh = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.58, 0.24), pantsMat);
                 thigh.position.y = -0.28;
                 thigh.castShadow = true;
@@ -1815,12 +1972,23 @@
 
             if (f.state === 'idle') {
                 const breath = Math.sin(t * 5.5);
-                r.hips.position.y = 1.05 + breath * 0.03;
-                r.torso.rotation.z = -0.06;
-                r.leftArm.rotation.set(0.3, 0, 0.95 + breath * 0.05);
-                r.rightArm.rotation.set(-0.3, 0, 0.75 - breath * 0.05);
-                r.leftLeg.rotation.set(0, 0, 0.15);
-                r.rightLeg.rotation.set(0, 0, -0.18);
+                if (f.data.id === 'fuki') {
+                    // Graceful Poised Kung-Fu Heroine Idle Stance
+                    r.hips.position.y = 1.06 + breath * 0.035;
+                    r.torso.rotation.z = -0.04;
+                    r.torso.rotation.y = 0.22;
+                    r.leftArm.rotation.set(0.38, 0, 1.32 + breath * 0.06);
+                    r.rightArm.rotation.set(-0.32, 0, 0.92 - breath * 0.06);
+                    r.leftLeg.rotation.set(0, 0, 0.18);
+                    r.rightLeg.rotation.set(0, 0, -0.22);
+                } else {
+                    r.hips.position.y = 1.05 + breath * 0.03;
+                    r.torso.rotation.z = -0.06;
+                    r.leftArm.rotation.set(0.3, 0, 0.95 + breath * 0.05);
+                    r.rightArm.rotation.set(-0.3, 0, 0.75 - breath * 0.05);
+                    r.leftLeg.rotation.set(0, 0, 0.15);
+                    r.rightLeg.rotation.set(0, 0, -0.18);
+                }
             } else if (f.state === 'walk') {
                 const stride = Math.sin(t * 14);
                 r.hips.position.y = 1.05 + Math.abs(stride) * 0.05;
