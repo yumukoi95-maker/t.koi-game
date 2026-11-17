@@ -112,6 +112,23 @@
         .letterbox-bar {
             transition: height 0.25s ease-out;
         }
+        /* Equalizer Animation Bars for BGM Widget */
+        @keyframes eqBounce {
+            0% { height: 3px; }
+            100% { height: 12px; }
+        }
+        .eq-bar {
+            width: 2.5px;
+            background: #22d3ee;
+            border-radius: 2px;
+            display: inline-block;
+            animation: eqBounce 0.35s infinite alternate ease-in-out;
+        }
+        .eq-bar.paused {
+            animation: none;
+            height: 3px !important;
+            background: #64748b;
+        }
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #090b10; }
@@ -138,40 +155,57 @@
     </div>
 
     <!-- TOP CONTROLLER & INPUT STATUS BAR -->
-    <div class="fixed top-1.5 left-1/2 -translate-x-1/2 z-40 flex flex-wrap items-center justify-center gap-2 px-3 py-1 rounded-full bg-slate-950/85 border border-slate-700/70 backdrop-blur-md text-xs interactive shadow-lg">
+    <div class="fixed top-1.5 left-1/2 -translate-x-1/2 z-40 flex flex-wrap items-center justify-center gap-2 px-3 py-1 rounded-full bg-slate-950/90 border border-slate-700/70 backdrop-blur-md text-xs interactive shadow-lg w-max max-w-[98vw]">
         <div class="flex items-center gap-1.5">
             <span id="gp1-dot" class="w-2.5 h-2.5 rounded-full bg-slate-600 inline-block"></span>
-            <span id="gp1-label" class="font-bold text-slate-300">PS5 Pad 1: Disconnected</span>
+            <span id="gp1-label" class="font-bold text-slate-300">PS5 Pad 1: Off</span>
         </div>
-        <span class="text-slate-600">|</span>
-        <div class="flex items-center gap-1.5">
+        <span class="text-slate-600 hidden sm:inline">|</span>
+        <div class="flex items-center gap-1.5 hidden sm:flex">
             <span id="gp2-dot" class="w-2.5 h-2.5 rounded-full bg-slate-600 inline-block"></span>
-            <span id="gp2-label" class="font-bold text-slate-300">PS5 Pad 2: Disconnected</span>
+            <span id="gp2-label" class="font-bold text-slate-300">PS5 Pad 2: Off</span>
         </div>
-        <button id="btn-pad-assign" onclick="togglePad1Assignment()" class="ml-1 px-2 py-0.5 rounded bg-indigo-950/90 hover:bg-indigo-800 text-cyan-300 border border-indigo-500/50 font-semibold transition" title="Great if you have 1 PS5 Controller and 1 Keyboard player!">
-            Pad 1 Controls: <span id="pad-assign-text" class="text-amber-300">P1</span>
+        <button id="btn-pad-assign" onclick="togglePad1Assignment()" class="px-2 py-0.5 rounded bg-indigo-950/90 hover:bg-indigo-800 text-cyan-300 border border-indigo-500/50 font-semibold transition" title="Great if you have 1 PS5 Controller and 1 Keyboard player!">
+            Pad 1: <span id="pad-assign-text" class="text-amber-300">P1</span>
         </button>
+
+        <!-- BGM SYNTHESIZER CONTROL WIDGET -->
+        <div class="flex items-center gap-1 bg-slate-900/95 px-2 py-0.5 rounded-full border border-cyan-500/40">
+            <div class="flex items-end gap-0.5 h-3 px-0.5" id="bgm-eq">
+                <span class="eq-bar" style="animation-delay:0s"></span>
+                <span class="eq-bar" style="animation-delay:0.12s"></span>
+                <span class="eq-bar" style="animation-delay:0.24s"></span>
+            </div>
+            <button onclick="toggleBGM()" id="btn-bgm-toggle" class="text-[11px] font-arcade font-bold text-cyan-300 hover:text-white transition">
+                BGM: ON
+            </button>
+            <span class="text-slate-600">|</span>
+            <button onclick="cycleBGMTrack()" id="btn-bgm-track" class="text-[11px] font-bold text-amber-300 hover:text-amber-200 transition" title="Click to switch BGM Synth Track">
+                🎵 Select Groove ⏭
+            </button>
+        </div>
+
         <button onclick="toggleControlsModal()" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold transition">
-            🎮 Controls Guide
+            🎮 Controls
         </button>
         <button onclick="toggleTouchControls()" id="btn-touch-toggle" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold transition">
-            📱 Touch Pad: OFF
+            📱 Touch: OFF
         </button>
     </div>
 
     <!-- ========================================== -->
     <!-- CHARACTER SELECT & MAIN MENU OVERLAY       -->
     <!-- ========================================== -->
-    <div id="menu-screen" class="ui-layer interactive flex flex-col justify-between p-3 md:p-6 pt-11 md:pt-12 bg-gradient-to-b from-slate-950/90 via-slate-950/55 to-slate-950/95 backdrop-blur-[2px] overflow-y-auto">
+    <div id="menu-screen" class="ui-layer interactive flex flex-col justify-between p-2.5 md:p-4 pt-11 md:pt-11 bg-gradient-to-b from-slate-950/90 via-slate-950/50 to-slate-950/95 backdrop-blur-[2px] overflow-y-auto">
         
         <!-- Header & Mode Selection -->
-        <div class="max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-3 border-b border-slate-800/80 pb-3">
+        <div class="max-w-7xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
             <div>
                 <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 text-[10px] font-arcade bg-gradient-to-r from-amber-500 to-red-600 text-black font-black rounded tracking-wider">AAA 3D FIGHTER (by T.Koi)</span>
-                    <span class="text-xs text-cyan-400 font-semibold tracking-widest uppercase">PS5 DualSense Ready • 60FPS WebGL</span>
+                    <span class="px-2 py-0.5 text-[10px] font-arcade bg-gradient-to-r from-amber-500 to-red-600 text-black font-black rounded tracking-wider">20 FIGHTERS • AAA 3D (by T.Koi)</span>
+                    <span class="text-xs text-cyan-400 font-semibold tracking-widest uppercase">PS5 DualSense + Arcade Synth BGM</span>
                 </div>
-                <h1 class="text-2xl sm:text-4xl md:text-5xl font-arcade font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-amber-400 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-arcade font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-200 to-amber-400 drop-shadow-[0_4px_15px_rgba(0,0,0,0.8)]">
                     T.Koi Fighter!!
                 </h1>
             </div>
@@ -292,28 +326,28 @@
                         <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-spd" class="h-full bg-gradient-to-l from-rose-500 to-orange-400 w-4/5 ml-auto"></div></div>
                     </div>
                     <div class="flex items-center gap-2 flex-row-reverse">
-                        <span class="w-16 text-slate-400 font-bold">RANGE</span>
-                        <div class="flex-1 h-2 bg-slate-800 rounded-full overflow-hidden"><div id="p2-stat-rng" class="h-full bg-gradient-to-l from-rose-500 to-purple-500 w-11/12 ml-auto"></div></div>
-                    </div>
-                </div>
-                <div class="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between flex-row-reverse text-xs">
+                <div class="mt-2 pt-1.5 border-t border-slate-800 flex items-center justify-between flex-row-reverse text-xs">
                     <span class="text-slate-400 font-semibold">:RAGE ART (R2)</span>
                     <span id="p2-select-special" class="text-amber-300 font-arcade font-bold">🐉 Supreme Dragon Overdrive</span>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom 6-Fighter Roster Grid & Start Match Button -->
-        <div class="max-w-6xl w-full mx-auto space-y-3">
-            <div id="roster-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5">
-                <!-- Populated dynamically by JS -->
+        <!-- Bottom 20-Fighter Compact 10x2 Arcade Roster Grid & Start Match Button -->
+        <div class="max-w-7xl w-full mx-auto space-y-2">
+            <div class="flex items-center justify-between px-1">
+                <span class="text-[11px] font-arcade font-bold text-cyan-300 tracking-wider uppercase">SELECT YOUR FIGHTER (20 ROSTER • D-PAD / CLICK)</span>
+                <span class="text-[11px] text-slate-400 font-semibold">Left-Click: P1 • Right-Click: P2</span>
+            </div>
+            <div id="roster-grid" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-10 gap-1.5">
+                <!-- Populated dynamically by JS for all 20 fighters -->
             </div>
 
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
-                <button onclick="startMatch()" class="w-full sm:w-auto px-10 py-3 rounded-xl font-arcade font-black text-base md:text-lg tracking-wider bg-gradient-to-r from-amber-500 via-red-600 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)] border border-amber-300/60 transform hover:scale-105 active:scale-95 transition">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-0.5">
+                <button onclick="startMatch()" class="w-full sm:w-auto px-9 py-2.5 rounded-xl font-arcade font-black text-sm md:text-base tracking-wider bg-gradient-to-r from-amber-500 via-red-600 to-rose-600 hover:from-amber-400 hover:to-rose-500 text-white shadow-[0_0_30px_rgba(244,63,94,0.6)] border border-amber-300/60 transform hover:scale-105 active:scale-95 transition">
                     ⚔️ START BATTLE (PRESS X / ENTER)
                 </button>
-                <button onclick="randomizeFighters()" class="px-5 py-3 rounded-xl font-arcade font-bold text-xs tracking-wider bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-600 transition">
+                <button onclick="randomizeFighters()" class="px-4 py-2.5 rounded-xl font-arcade font-bold text-xs tracking-wider bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-600 transition">
                     🎲 RANDOM SELECT
                 </button>
             </div>
@@ -578,9 +612,10 @@
 
     <script>
         /********************************************************************
-         * 1. FIGHTER ROSTER DATA (THE 6 CUSTOM CHARACTERS)
+         * 1. FIGHTER ROSTER DATA (ALL 20 CUSTOM CHARACTERS)
          ********************************************************************/
         const FIGHTERS = [
+            // --- ORIGINAL 6 FIGHTERS ---
             {
                 id: 'aisei',
                 name: 'AISEI',
@@ -590,16 +625,8 @@
                 specialName: '⚡ Thunder God Fist',
                 desc: 'High-voltage karate prodigy with spiky cyan hair, cyber-gi vest, and explosive blue lightning uppercuts.',
                 quote: '"Feel the surge of a thousand thunderstorms!"',
-                stats: { power: 82, speed: 94, range: 78 },
-                colors: {
-                    skin: 0xffd1b3,
-                    hair: 0x00e5ff,
-                    top: 0x0f172a,
-                    trim: 0x00f0ff,
-                    pants: 0x1e293b,
-                    gloves: 0x0284c7,
-                    aura: 0x00e5ff
-                },
+                stats: { power: 84, speed: 94, range: 80 },
+                colors: { skin: 0xffd1b3, hair: 0x00e5ff, top: 0x0f172a, trim: 0x00f0ff, pants: 0x1e293b, gloves: 0x0284c7, aura: 0x00e5ff },
                 scale: { x: 1.0, y: 1.0, z: 1.0 }
             },
             {
@@ -611,17 +638,9 @@
                 specialName: '🌋 Meteor Ground Slam',
                 desc: 'Powerhouse street brawler with crimson headband, magma-armored gauntlets, and ground-shattering shockwaves.',
                 quote: '"Stand firm all you want—I will shatter the ground beneath you!"',
-                stats: { power: 96, speed: 74, range: 84 },
-                colors: {
-                    skin: 0xf4bd96,
-                    hair: 0x271c19,
-                    top: 0x7f1d1d,
-                    trim: 0xff5500,
-                    pants: 0x262626,
-                    gloves: 0xd97706,
-                    aura: 0xff4500
-                },
-                scale: { x: 1.16, y: 1.04, z: 1.14 }
+                stats: { power: 96, speed: 75, range: 84 },
+                colors: { skin: 0xf4bd96, hair: 0x271c19, top: 0x7f1d1d, trim: 0xff5500, pants: 0x262626, gloves: 0xd97706, aura: 0xff4500 },
+                scale: { x: 1.15, y: 1.04, z: 1.14 }
             },
             {
                 id: 'fuki',
@@ -629,19 +648,11 @@
                 gender: 'girl',
                 title: '"The Jade Kung-Fu Empress"',
                 style: 'Heavenly Dragon Kung-Fu',
-                specialName: '🐉 Spinning Phoenix Kick',
-                desc: 'Stylish Kung-Fu prodigy in a royal jade & gold silk Qipao with twin ox-horn hair buns, golden wrist bangles, and lightning-fast lotus kicks.',
+                specialName: '🐉 Heavenly Dragon Kick',
+                desc: 'Stylish Kung-Fu prodigy in a royal jade & gold silk Qipao with twin ox-horn hair buns, golden wrist bangles, and lightning lotus kicks.',
                 quote: '"Grace like flowing silk, strikes like a heavenly dragon!"',
-                stats: { power: 82, speed: 100, range: 88 },
-                colors: {
-                    skin: 0xffe5d4,
-                    hair: 0x160f1a,
-                    top: 0x059669,
-                    trim: 0xfbbf24,
-                    pants: 0x1e1b2e,
-                    gloves: 0xf59e0b,
-                    aura: 0x34d399
-                },
+                stats: { power: 83, speed: 100, range: 88 },
+                colors: { skin: 0xffe5d4, hair: 0x160f1a, top: 0x059669, trim: 0xfbbf24, pants: 0x1e1b2e, gloves: 0xf59e0b, aura: 0x34d399 },
                 scale: { x: 0.94, y: 0.98, z: 0.94 }
             },
             {
@@ -653,17 +664,9 @@
                 specialName: '🌸 Sakura Supernova',
                 desc: 'Graceful martial artist in a pink-gold battle kimono who channels explosive cherry blossom shockwaves.',
                 quote: '"Even the softest petal strikes like steel in full bloom."',
-                stats: { power: 85, speed: 90, range: 88 },
-                colors: {
-                    skin: 0xffe4d0,
-                    hair: 0xf472b6,
-                    top: 0x831843,
-                    trim: 0xfbbf24,
-                    pants: 0x31102f,
-                    gloves: 0xec4899,
-                    aura: 0xff2e93
-                },
-                scale: { x: 0.93, y: 0.98, z: 0.93 }
+                stats: { power: 85, speed: 91, range: 88 },
+                colors: { skin: 0xffe4d0, hair: 0xf472b6, top: 0x831843, trim: 0xfbbf24, pants: 0x31102f, gloves: 0xec4899, aura: 0xff2e93 },
+                scale: { x: 0.94, y: 0.98, z: 0.94 }
             },
             {
                 id: 'tkoi',
@@ -674,16 +677,8 @@
                 specialName: '🐉 Supreme Dragon Overdrive',
                 desc: 'Heavily muscular martial arts grandmaster clad in black & gold dragon regalia with golden lightning dominance.',
                 quote: '"Bow before true martial perfection. The Iron Fist belongs to T.Koi!"',
-                stats: { power: 100, speed: 88, range: 94 },
-                colors: {
-                    skin: 0xe6a97c,
-                    hair: 0x111115,
-                    top: 0x09090b,
-                    trim: 0xffd700,
-                    pants: 0x18181b,
-                    gloves: 0xf59e0b,
-                    aura: 0xffd700
-                },
+                stats: { power: 100, speed: 89, range: 95 },
+                colors: { skin: 0xe6a97c, hair: 0x111115, top: 0x09090b, trim: 0xffd700, pants: 0x18181b, gloves: 0xf59e0b, aura: 0xffd700 },
                 scale: { x: 1.25, y: 1.12, z: 1.22 }
             },
             {
@@ -695,17 +690,192 @@
                 specialName: '🔮 Void Eclipse Barrage',
                 desc: 'Silver-violet haired rushdown specialist who teleports through shadow rifts and strikes with purple flames.',
                 quote: '"From the eclipse I strike—you already missed your chance."',
-                stats: { power: 84, speed: 96, range: 82 },
-                colors: {
-                    skin: 0xfde2cc,
-                    hair: 0xc084fc,
-                    top: 0x2e1065,
-                    trim: 0xa855f7,
-                    pants: 0x090d16,
-                    gloves: 0x9333ea,
-                    aura: 0xa855f7
-                },
+                stats: { power: 84, speed: 96, range: 83 },
+                colors: { skin: 0xfde2cc, hair: 0xc084fc, top: 0x2e1065, trim: 0xa855f7, pants: 0x090d16, gloves: 0x9333ea, aura: 0xa855f7 },
                 scale: { x: 0.98, y: 1.0, z: 0.98 }
+            },
+            // --- 14 NEW FIGHTERS ---
+            {
+                id: 'yuika',
+                name: 'YUIKA',
+                gender: 'girl',
+                title: '"The Starlight Valkyrie"',
+                style: 'Celestial Astra Martial Arts',
+                specialName: '✨ Cosmic Starlight Lance',
+                desc: 'Elegant valkyrie fighter with a flowing lavender-silver ponytail, starlight tiara, and celestial amethyst battle dress.',
+                quote: '"May the judgment of a billion stars illuminate this arena!"',
+                stats: { power: 86, speed: 94, range: 92 },
+                colors: { skin: 0xfff0e6, hair: 0xe9d5ff, top: 0xf8fafc, trim: 0xc084fc, pants: 0x3b0764, gloves: 0xa855f7, aura: 0xe879f9 },
+                scale: { x: 0.94, y: 1.0, z: 0.94 }
+            },
+            {
+                id: 'anne',
+                name: 'ANNE',
+                gender: 'girl',
+                title: '"The Scarlet Rose Duelist"',
+                style: 'Royal Savate & Rose Arts',
+                specialName: '🌹 Crimson Rose Spiral',
+                desc: 'Aristocratic blonde twin-drill duelist in a crimson & white corset jacket who overwhelms foes with rapier-like kicks.',
+                quote: '"Every rose has its thorns, darling—prepare to be pierced!"',
+                stats: { power: 83, speed: 95, range: 90 },
+                colors: { skin: 0xffeadb, hair: 0xfacc15, top: 0x9f1239, trim: 0xfef08a, pants: 0x1f2937, gloves: 0xe11d48, aura: 0xf43f5e },
+                scale: { x: 0.94, y: 0.99, z: 0.94 }
+            },
+            {
+                id: 'honoka',
+                name: 'HONOKA',
+                gender: 'girl',
+                title: '"The Solar Phoenix Dancer"',
+                style: 'Blazing Capoeira & Kickboxing',
+                specialName: '🔥 Solar Phoenix Flare',
+                desc: 'Energetic fighter with sunset-orange braided pigtails, flame-trimmed crop jacket, pleated battle skirt, and fiery kicks.',
+                quote: '"My flames dance higher with every beat of the music!"',
+                stats: { power: 88, speed: 96, range: 85 },
+                colors: { skin: 0xffdfc4, hair: 0xf97316, top: 0x9a3412, trim: 0xfde047, pants: 0x18181b, gloves: 0xea580c, aura: 0xff7b00 },
+                scale: { x: 0.94, y: 0.97, z: 0.94 }
+            },
+            {
+                id: 'sara',
+                name: 'SARA',
+                gender: 'girl',
+                title: '"The Frost Blade Kunoichi"',
+                style: 'Sub-Zero Shinobi Ninjutsu',
+                specialName: '❄️ Absolute Zero Blizzard',
+                desc: 'Cyber-ninja assassin with a sleek icy-blue bob cut, crystal hairpin, and diamond-frost scarf.',
+                quote: '"Freeze in silence. Your movements are already crystalized."',
+                stats: { power: 81, speed: 99, range: 87 },
+                colors: { skin: 0xfff1e6, hair: 0x7dd3fc, top: 0x0c4a6e, trim: 0x38bdf8, pants: 0x082f49, gloves: 0x0284c7, aura: 0x38bdf8 },
+                scale: { x: 0.93, y: 0.98, z: 0.93 }
+            },
+            {
+                id: 'himari',
+                name: 'HIMARI',
+                gender: 'girl',
+                title: '"The Ribbon Kitty Striker"',
+                style: 'Acrobatic Neko Fist',
+                specialName: '🎀 Mega Kitty Ribbon Smash',
+                desc: 'Ultra-stylish fighter with pastel-pink twin buns, iconic red ribbon cat-ear headband, and deceptive knockout power.',
+                quote: '"Cute? Thank you! Now catch this hundred-ton ribbon punch!"',
+                stats: { power: 90, speed: 97, range: 82 },
+                colors: { skin: 0xffece0, hair: 0xf9a8d4, top: 0xffffff, trim: 0xef4444, pants: 0x881337, gloves: 0xef4444, aura: 0xfb7185 },
+                scale: { x: 0.92, y: 0.95, z: 0.92 }
+            },
+            {
+                id: 'sowa',
+                name: 'SOWA',
+                gender: 'boy',
+                title: '"The Gale Force Prodigy"',
+                style: 'Tempest Taekkyon & Aero Fist',
+                specialName: '🌪️ Supersonic Hurricane Upper',
+                desc: 'High-flying wind striker with emerald-teal spiky hair, sleeveless aero hoodie vest, and tornado-spun kicks.',
+                quote: '"You cannot catch the wind—and you cannot block a hurricane!"',
+                stats: { power: 82, speed: 98, range: 87 },
+                colors: { skin: 0xffd8b8, hair: 0x2dd4bf, top: 0x064e3b, trim: 0x5eead4, pants: 0x0f172a, gloves: 0x14b8a6, aura: 0x2dd4bf },
+                scale: { x: 0.98, y: 1.0, z: 0.98 }
+            },
+            {
+                id: 'sakito',
+                name: 'SAKITO',
+                gender: 'boy',
+                title: '"The Crimson Samurai"',
+                style: 'Iai Spirit Blade Kenjutsu',
+                specialName: '⚔️ Crimson Iai Slash Wave',
+                desc: 'Calm and lethal warrior with a jet-black samurai topknot and armored scarlet-gold haori who projects vacuum blade slashes.',
+                quote: '"One draw, one heartbeat. The outcome is already decided."',
+                stats: { power: 92, speed: 90, range: 94 },
+                colors: { skin: 0xfbe0c8, hair: 0x18181b, top: 0x991b1b, trim: 0xfbbf24, pants: 0x09090b, gloves: 0xdc2626, aura: 0xff1e42 },
+                scale: { x: 1.02, y: 1.02, z: 1.02 }
+            },
+            {
+                id: 'yuto',
+                name: 'YUTO',
+                gender: 'boy',
+                title: '"The Cobalt Cyber Boxer"',
+                style: 'Kinetic Overdrive Boxing',
+                specialName: '🥊 Plasma Dempsey Roll',
+                desc: 'Futuristic champion boxer sporting a neon-blue visor, electric undercut, and heavy piston-driven gauntlets.',
+                quote: '"Target locked. Engaging maximum kinetic weave and knockout!"',
+                stats: { power: 91, speed: 93, range: 80 },
+                colors: { skin: 0xf5cba7, hair: 0x2563eb, top: 0x1e3a8a, trim: 0x60a5fa, pants: 0x0f172a, gloves: 0x3b82f6, aura: 0x3b82f6 },
+                scale: { x: 1.05, y: 1.01, z: 1.05 }
+            },
+            {
+                id: 'ao',
+                name: 'AO',
+                gender: 'boy',
+                title: '"The Azure Water Dragon"',
+                style: 'Flowing Stream Bajiquan',
+                specialName: '🌊 Tidal Dragon Whirlpool',
+                desc: 'Cool-headed martial artist with deep ocean-blue hair and an indigo dragon-scale sleeveless gi.',
+                quote: '"Still water runs deep—until it becomes a crushing tsunami."',
+                stats: { power: 87, speed: 91, range: 89 },
+                colors: { skin: 0xfde2cc, hair: 0x0284c7, top: 0x1e1b4b, trim: 0x06b6d4, pants: 0x0f172a, gloves: 0x0891b2, aura: 0x00d8ff },
+                scale: { x: 1.0, y: 1.01, z: 1.0 }
+            },
+            {
+                id: 'haruaki',
+                name: 'HARUAKI',
+                gender: 'boy',
+                title: '"The Golden Sun Monk"',
+                style: 'Radiant Shaolin Solar Arts',
+                specialName: '☀️ Solar Buddha Palm',
+                desc: 'Enlightened young warrior with spiky golden hair, maroon-and-gold robes, and floating prayer bead orbs.',
+                quote: '"Shine forth! Let solar chi purify this battlefield!"',
+                stats: { power: 90, speed: 88, range: 91 },
+                colors: { skin: 0xf8cfa9, hair: 0xfbbf24, top: 0x7c2d12, trim: 0xfde047, pants: 0x451a03, gloves: 0xf59e0b, aura: 0xffd000 },
+                scale: { x: 1.03, y: 1.01, z: 1.03 }
+            },
+            {
+                id: 'joe',
+                name: 'JOE',
+                gender: 'boy',
+                title: '"The Street Brawler King"',
+                style: 'Outlaw Kickboxing & Wrestling',
+                specialName: '💥 Nitro Knuckle Buster',
+                desc: 'Fearless street legend with a blonde pompadour, dark shades, red leather biker vest, and explosive haymakers.',
+                quote: '"No rules, no excuses—just pure street knockout power, baby!"',
+                stats: { power: 94, speed: 85, range: 85 },
+                colors: { skin: 0xf4bd96, hair: 0xfacc15, top: 0xb91c1c, trim: 0xfbbf24, pants: 0x1e293b, gloves: 0xdc2626, aura: 0xff5e00 },
+                scale: { x: 1.08, y: 1.03, z: 1.08 }
+            },
+            {
+                id: 'kyoma',
+                name: 'KYOMA',
+                gender: 'boy',
+                title: '"The Pixel Blaster Hero"',
+                style: 'Arcade Gun-Kata & Rushdown',
+                specialName: '☄️ Hyper Cannon Barrage',
+                desc: 'Fiery red-and-black spiky-haired arcade hero equipped with dual wrist-blasters and high-score combo finishers.',
+                quote: '"Insert coin! Ready Player One—here comes the ultimate combo!"',
+                stats: { power: 88, speed: 92, range: 94 },
+                colors: { skin: 0xffd5b8, hair: 0xef4444, top: 0x18181b, trim: 0x22c55e, pants: 0x27272a, gloves: 0xef4444, aura: 0x10b981 },
+                scale: { x: 1.0, y: 1.0, z: 1.0 }
+            },
+            {
+                id: 'sora',
+                name: 'SORA',
+                gender: 'boy',
+                title: '"The Sky Horizon Striker"',
+                style: 'Cloud-Strider Aerial Kung-Fu',
+                specialName: '🦅 Stratosphere Dive Kick',
+                desc: 'Feather-haired sky warrior in a white-and-azure winged jacket who dominates aerial juggle combat.',
+                quote: '"Look to the horizon! Above the clouds, nobody can touch me!"',
+                stats: { power: 83, speed: 99, range: 88 },
+                colors: { skin: 0xffe4cc, hair: 0x93c5fd, top: 0xf8fafc, trim: 0x38bdf8, pants: 0x1e3a8a, gloves: 0x0ea5e9, aura: 0x60a5fa },
+                scale: { x: 0.98, y: 1.0, z: 0.98 }
+            },
+            {
+                id: 'rintaro',
+                name: 'RINTARO',
+                gender: 'boy',
+                title: '"The Earthshaker Berserker"',
+                style: 'Colossus Grappler & Impact Arts',
+                specialName: '🪨 Tectonic Quake Crusher',
+                desc: 'Fierce juggernaut with wild bronze hair and heavy emerald-gold shoulder armor who crushes guards with raw force.',
+                quote: '"Bring all your strength! I will crush it with a single roar!"',
+                stats: { power: 98, speed: 78, range: 88 },
+                colors: { skin: 0xebaf85, hair: 0x92400e, top: 0x14532d, trim: 0xfacc15, pants: 0x1c1917, gloves: 0xca8a04, aura: 0x84cc16 },
+                scale: { x: 1.18, y: 1.06, z: 1.16 }
             }
         ];
 
@@ -716,12 +886,42 @@
         ];
 
         /********************************************************************
-         * 2. SYNTHESIZED WEB AUDIO SOUND ENGINE & ARCADE ANNOUNCER
+         * 2. SYNTHESIZED WEB AUDIO SOUND ENGINE, BGM SEQUENCER & ANNOUNCER
          ********************************************************************/
+        const BGM_TRACKS = [
+            {
+                name: 'Select Groove',
+                bpm: 128,
+                bass: [55, 55, 65.41, 55, 73.42, 65.41, 49, 55],
+                lead: [220, 0, 261.63, 293.66, 329.63, 0, 392.00, 329.63, 293.66, 0, 261.63, 220, 196.00, 220, 261.63, 0],
+                wave: 'triangle'
+            },
+            {
+                name: 'Dojo Overdrive',
+                bpm: 150,
+                bass: [65.41, 65.41, 77.78, 87.31, 65.41, 65.41, 98.00, 87.31],
+                lead: [523.25, 392.00, 466.16, 523.25, 622.25, 523.25, 466.16, 392.00, 587.33, 466.16, 523.25, 698.46, 622.25, 523.25, 466.16, 392.00],
+                wave: 'sawtooth'
+            },
+            {
+                name: 'Final Boss Temple',
+                bpm: 162,
+                bass: [58.27, 58.27, 61.74, 58.27, 69.30, 65.41, 61.74, 58.27],
+                lead: [466.16, 0, 493.88, 466.16, 554.37, 523.25, 493.88, 466.16, 698.46, 659.25, 554.37, 493.88, 466.16, 0, 349.23, 466.16],
+                wave: 'square'
+            }
+        ];
+
         class SoundEngine {
             constructor() {
                 this.ctx = null;
                 this.muted = false;
+                this.bgmEnabled = true;
+                this.bgmPlaying = false;
+                this.bgmTrackIdx = 0;
+                this.bgmStep = 0;
+                this.bgmTimer = null;
+                this.rageTempoBoost = false;
             }
             init() {
                 if (!this.ctx) {
@@ -730,6 +930,122 @@
                 }
                 if (this.ctx && this.ctx.state === 'suspended') {
                     this.ctx.resume();
+                }
+                if (this.bgmEnabled && !this.bgmPlaying) {
+                    this.startBGM();
+                }
+            }
+            startBGM() {
+                if (!this.ctx || !this.bgmEnabled) return;
+                this.stopBGM();
+                this.bgmPlaying = true;
+                this.scheduleNextBGMStep();
+                this.updateBGMUI();
+            }
+            stopBGM() {
+                this.bgmPlaying = false;
+                if (this.bgmTimer) {
+                    clearTimeout(this.bgmTimer);
+                    this.bgmTimer = null;
+                }
+                this.updateBGMUI();
+            }
+            setBGMTrack(idx) {
+                this.bgmTrackIdx = idx % BGM_TRACKS.length;
+                this.bgmStep = 0;
+                this.updateBGMUI();
+            }
+            updateBGMUI() {
+                const btnToggle = document.getElementById('btn-bgm-toggle');
+                const btnTrack = document.getElementById('btn-bgm-track');
+                const eqBars = document.querySelectorAll('#bgm-eq .eq-bar');
+                if (btnToggle) {
+                    btnToggle.textContent = this.bgmEnabled ? 'BGM: ON' : 'BGM: MUTE';
+                    btnToggle.className = this.bgmEnabled
+                        ? 'text-[11px] font-arcade font-bold text-cyan-300 hover:text-white transition'
+                        : 'text-[11px] font-arcade font-bold text-rose-400 hover:text-white transition';
+                }
+                if (btnTrack) {
+                    btnTrack.textContent = `🎵 ${BGM_TRACKS[this.bgmTrackIdx].name} ⏭`;
+                }
+                eqBars.forEach(b => b.classList.toggle('paused', !this.bgmEnabled || !this.bgmPlaying));
+            }
+            scheduleNextBGMStep() {
+                if (!this.bgmPlaying || !this.bgmEnabled || !this.ctx) return;
+                const track = BGM_TRACKS[this.bgmTrackIdx];
+                const effectiveBpm = this.rageTempoBoost ? track.bpm * 1.16 : track.bpm;
+                const stepDur = (60 / effectiveBpm) * 0.25; // 16th note step
+                this.playBGMStep(track, this.bgmStep, stepDur);
+                this.bgmStep = (this.bgmStep + 1) % 16;
+                this.bgmTimer = setTimeout(() => this.scheduleNextBGMStep(), stepDur * 1000);
+            }
+            playBGMStep(track, step, dur) {
+                if (this.muted || !this.ctx) return;
+                const now = this.ctx.currentTime;
+
+                // 1. Electronic Kick Drum on 0, 4, 8, 12 (plus syncopation on 14)
+                if (step % 4 === 0 || step === 14) {
+                    const kOsc = this.ctx.createOscillator();
+                    const kGain = this.ctx.createGain();
+                    kOsc.type = 'sine';
+                    kOsc.frequency.setValueAtTime(125, now);
+                    kOsc.frequency.exponentialRampToValueAtTime(32, now + 0.11);
+                    kGain.gain.setValueAtTime(0.16, now);
+                    kGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+                    kOsc.connect(kGain);
+                    kGain.connect(this.ctx.destination);
+                    kOsc.start(now);
+                    kOsc.stop(now + 0.12);
+                }
+
+                // 2. Crisp Hi-Hat / Snare pulse on off-beats
+                if (step % 2 === 1 || step === 4 || step === 12) {
+                    const isSnare = (step === 4 || step === 12);
+                    const hOsc = this.ctx.createOscillator();
+                    const hGain = this.ctx.createGain();
+                    hOsc.type = isSnare ? 'triangle' : 'square';
+                    hOsc.frequency.setValueAtTime(isSnare ? 240 : 4200, now);
+                    hOsc.frequency.exponentialRampToValueAtTime(isSnare ? 85 : 1800, now + (isSnare ? 0.08 : 0.03));
+                    hGain.gain.setValueAtTime(isSnare ? 0.08 : 0.02, now);
+                    hGain.gain.exponentialRampToValueAtTime(0.001, now + (isSnare ? 0.08 : 0.03));
+                    hOsc.connect(hGain);
+                    hGain.connect(this.ctx.destination);
+                    hOsc.start(now);
+                    hOsc.stop(now + 0.09);
+                }
+
+                // 3. Driving Synth Bassline (every 2 steps)
+                const bassFreq = track.bass[Math.floor(step / 2) % track.bass.length];
+                if (bassFreq > 0 && step % 2 === 0) {
+                    const bOsc = this.ctx.createOscillator();
+                    const bFilter = this.ctx.createBiquadFilter();
+                    const bGain = this.ctx.createGain();
+                    bOsc.type = 'sawtooth';
+                    bOsc.frequency.setValueAtTime(bassFreq, now);
+                    bFilter.type = 'lowpass';
+                    bFilter.frequency.setValueAtTime(380, now);
+                    bGain.gain.setValueAtTime(0.09, now);
+                    bGain.gain.exponentialRampToValueAtTime(0.005, now + dur * 1.8);
+                    bOsc.connect(bFilter);
+                    bFilter.connect(bGain);
+                    bGain.connect(this.ctx.destination);
+                    bOsc.start(now);
+                    bOsc.stop(now + dur * 1.9);
+                }
+
+                // 4. Arpeggiated Arcade Lead Synth
+                const leadFreq = track.lead[step % track.lead.length];
+                if (leadFreq > 0) {
+                    const lOsc = this.ctx.createOscillator();
+                    const lGain = this.ctx.createGain();
+                    lOsc.type = track.wave;
+                    lOsc.frequency.setValueAtTime(leadFreq, now);
+                    lGain.gain.setValueAtTime(0.045, now);
+                    lGain.gain.exponentialRampToValueAtTime(0.002, now + dur * 0.92);
+                    lOsc.connect(lGain);
+                    lGain.connect(this.ctx.destination);
+                    lOsc.start(now);
+                    lOsc.stop(now + dur);
                 }
             }
             announce(text, pitch = 0.85, rate = 1.02) {
@@ -853,6 +1169,26 @@
             }
         }
         const sfx = new SoundEngine();
+
+        // Auto-unlock Web Audio BGM on first user click or key/gamepad interaction
+        window.addEventListener('pointerdown', () => sfx.init(), { once: true });
+        window.addEventListener('keydown', () => sfx.init(), { once: true });
+
+        function toggleBGM() {
+            sfx.init();
+            sfx.bgmEnabled = !sfx.bgmEnabled;
+            if (sfx.bgmEnabled) sfx.startBGM();
+            else sfx.stopBGM();
+        }
+
+        function cycleBGMTrack() {
+            sfx.init();
+            sfx.setBGMTrack(sfx.bgmTrackIdx + 1);
+            if (!sfx.bgmEnabled) {
+                sfx.bgmEnabled = true;
+                sfx.startBGM();
+            }
+        }
 
         /********************************************************************
          * 3. THREE.JS 3D SCENE, ARENA & ARTICULATED FIGHTER BUILDER
@@ -1001,7 +1337,7 @@
 
             const isFuki = charData.id === 'fuki';
             const isFemale = charData.gender === 'girl';
-            const pelvisWidth = isFuki ? 0.48 : 0.52;
+            const pelvisWidth = isFemale ? 0.48 : 0.52;
             const pelvisMesh = new THREE.Mesh(new THREE.BoxGeometry(pelvisWidth, 0.26, 0.33), isFuki ? topMat : pantsMat);
             pelvisMesh.castShadow = true;
             hips.add(pelvisMesh);
@@ -1027,10 +1363,17 @@
                 backTrim.position.set(-0.235, -0.18, 0);
                 backTrim.rotation.z = -0.14;
 
-                // Gold silk waist bow knot
                 const sashBow = new THREE.Mesh(new THREE.OctahedronGeometry(0.11, 0), trimMat);
                 sashBow.position.set(0.27, 0.08, 0);
                 hips.add(frontTrim, frontPanel, backTrim, backPanel, sashBow);
+            } else if (isFemale && ['yuika', 'anne', 'honoka', 'himari', 'hanami'].includes(charData.id)) {
+                // Pleated Martial Arts Battle Skirt / Hakama Skirt for Female Heroines
+                const skirtGeo = new THREE.CylinderGeometry(0.24, 0.38, 0.34, 14);
+                const skirtMesh = new THREE.Mesh(skirtGeo, topMat);
+                skirtMesh.position.y = -0.12;
+                const skirtTrim = new THREE.Mesh(new THREE.CylinderGeometry(0.37, 0.39, 0.05, 14), trimMat);
+                skirtTrim.position.y = -0.27;
+                hips.add(skirtMesh, skirtTrim);
             }
 
             // Torso / Chest
@@ -1038,9 +1381,9 @@
             torso.position.y = 0.15;
             hips.add(torso);
 
-            const chestWidth = charData.id === 'tkoi' ? 0.68 : (charData.id === 'fumio' ? 0.64 : (isFemale ? 0.46 : 0.54));
-            if (isFuki) {
-                // Feminine Hourglass Qipao Bodice with Mandarin Collar & Puffy Cap Sleeves
+            const chestWidth = charData.id === 'tkoi' ? 0.68 : (['fumio', 'rintaro', 'joe'].includes(charData.id) ? 0.63 : (isFemale ? 0.46 : 0.54));
+            if (isFemale) {
+                // Feminine Contoured Bodice with Collar & Trim
                 const waistMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.23, 0.20, 0.34, 12), topMat);
                 waistMesh.position.y = 0.17;
                 waistMesh.castShadow = true;
@@ -1051,18 +1394,16 @@
                 upperBodice.castShadow = true;
                 torso.add(upperBodice);
 
-                // Feminine bust contour & gold Qipao piping
-                const bustContour = new THREE.Mesh(new THREE.SphereGeometry(0.19, 12, 10), topMat);
-                bustContour.scale.set(0.95, 0.78, 1.25);
+                const bustContour = new THREE.Mesh(new THREE.SphereGeometry(0.185, 12, 10), topMat);
+                bustContour.scale.set(0.95, 0.78, 1.24);
                 bustContour.position.set(0.11, 0.47, 0);
                 torso.add(bustContour);
 
-                // Ornate gold Qipao front chest Lapel & Mandarin Collar
                 const qipaoTrim = new THREE.Mesh(new THREE.CylinderGeometry(0.268, 0.235, 0.34, 12, 1, false, -0.6, 1.2), trimMat);
                 qipaoTrim.position.y = 0.48;
                 torso.add(qipaoTrim);
 
-                const mandarinCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.14, 0.12, 12), trimMat);
+                const mandarinCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.14, 0.11, 12), trimMat);
                 mandarinCollar.position.y = 0.70;
                 torso.add(mandarinCollar);
             } else {
@@ -1071,7 +1412,6 @@
                 chestMesh.castShadow = true;
                 torso.add(chestMesh);
 
-                // Glowing V-Trim / Emblem on Chest
                 const emblemMesh = new THREE.Mesh(new THREE.BoxGeometry(chestWidth * 0.6, 0.5, 0.38), trimMat);
                 emblemMesh.position.y = 0.36;
                 torso.add(emblemMesh);
@@ -1082,16 +1422,15 @@
             head.position.y = 0.82;
             torso.add(head);
 
-            if (isFuki) {
-                // Soft sculpted feminine face
+            if (isFemale) {
+                // Soft sculpted feminine face with expressive irises, eyelashes & rosy blush
                 const femHead = new THREE.Mesh(new THREE.SphereGeometry(0.21, 16, 16), skinMat);
                 femHead.scale.set(0.95, 1.04, 0.92);
                 femHead.castShadow = true;
                 head.add(femHead);
 
-                // Expressive Eyes + Dark Eyelashes + Rosy Blush Cheeks
                 const eyeWhiteMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-                const irisMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+                const irisMat = new THREE.MeshBasicMaterial({ color: c.aura });
                 const lashMat = new THREE.MeshBasicMaterial({ color: 0x09050d });
                 const blushMat = new THREE.MeshBasicMaterial({ color: 0xff7eb6, transparent: true, opacity: 0.55 });
 
@@ -1112,7 +1451,6 @@
                 skull.castShadow = true;
                 head.add(skull);
 
-                // Glowing Eyes (Facing +X in local fighter space)
                 const eyeMat = new THREE.MeshBasicMaterial({ color: charData.id === 'tkoi' ? 0xffd700 : 0xffffff });
                 const leftEye = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, 0.07), eyeMat);
                 leftEye.position.set(0.17, 0.04, 0.09);
@@ -1121,104 +1459,161 @@
                 head.add(leftEye, rightEye);
             }
 
-            // Distinct Hair / Accessories per Character
-            if (charData.id === 'aisei' || charData.id === 'yayoi' || charData.id === 'tkoi') {
-                // Spiky Anime / Mishima Hair
+            // Distinct Hair & Iconic Accessories for All 20 Characters
+            const id = charData.id;
+            if (['aisei', 'yayoi', 'tkoi', 'sowa', 'haruaki', 'kyoma', 'sora', 'rintaro'].includes(id)) {
+                // Spiky Anime / Mishima Martial Hair
                 for (let i = 0; i < 6; i++) {
-                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.32, 5), hairMat);
+                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.11, 0.33, 5), hairMat);
                     spike.position.set(-0.05 + (i % 2) * 0.08, 0.24, (i - 2.5) * 0.06);
                     spike.rotation.z = 0.35;
                     spike.rotation.x = (i - 2.5) * 0.2;
                     head.add(spike);
                 }
-            } else if (charData.id === 'fumio') {
-                // Flat-top + Flowing Crimson Headband
-                const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.16, 0.39), hairMat);
-                hairTop.position.y = 0.18;
-                const band = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.08, 0.4), trimMat);
-                band.position.y = 0.1;
-                const tail = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.07, 0.12), trimMat);
-                tail.position.set(-0.28, 0.06, 0);
-                tail.rotation.z = 0.3;
-                head.add(hairTop, band, tail);
-            } else if (charData.id === 'fuki') {
-                // Iconic Kung-Fu Girl Double Ox-Horn Hair Buns (Odango) + Gold BrocadeCovers & Flowing Silk Ribbons
+                if (id === 'sowa') {
+                    const bandana = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.07, 0.39), trimMat);
+                    bandana.position.y = 0.11;
+                    head.add(bandana);
+                }
+                if (id === 'haruaki') {
+                    // Floating Golden Solar Prayer Beads around shoulders
+                    for (let b = 0; b < 7; b++) {
+                        const bead = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), trimMat);
+                        const ang = (b / 6) * Math.PI - Math.PI / 2;
+                        bead.position.set(-0.12, 0.55 + Math.cos(ang) * 0.32, Math.sin(ang) * 0.38);
+                        torso.add(bead);
+                    }
+                }
+            } else if (id === 'fumio' || id === 'joe') {
+                // Flat-top / Pompadour + Headband or Sunglasses
+                const hairTop = new THREE.Mesh(new THREE.BoxGeometry(0.41, 0.18, 0.39), hairMat);
+                hairTop.position.set(id === 'joe' ? 0.06 : 0, 0.19, 0);
+                head.add(hairTop);
+                if (id === 'fumio') {
+                    const band = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.08, 0.4), trimMat);
+                    band.position.y = 0.1;
+                    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.07, 0.12), trimMat);
+                    tail.position.set(-0.28, 0.06, 0);
+                    tail.rotation.z = 0.3;
+                    head.add(band, tail);
+                } else {
+                    // Joe's Dark Street Shades
+                    const shades = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.38), new THREE.MeshBasicMaterial({ color: 0x09090b }));
+                    shades.position.set(0.18, 0.05, 0);
+                    head.add(shades);
+                }
+            } else if (id === 'sakito' || id === 'ao' || id === 'yuto') {
+                const hairCap = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.18, 0.39), hairMat);
+                hairCap.position.y = 0.16;
+                head.add(hairCap);
+                if (id === 'sakito') {
+                    // High Samurai Topknot
+                    const topknot = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.28, 8), hairMat);
+                    topknot.position.set(-0.12, 0.30, 0);
+                    topknot.rotation.z = 0.45;
+                    head.add(topknot);
+                } else if (id === 'ao') {
+                    // Flowing Water-Dragon Long Back Hair
+                    const mane = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.55, 0.34), hairMat);
+                    mane.position.set(-0.20, -0.05, 0);
+                    mane.rotation.z = 0.22;
+                    head.add(mane);
+                } else if (id === 'yuto') {
+                    // Glowing Cyber Boxer Visor
+                    const visor = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.09, 0.39), trimMat);
+                    visor.position.set(0.18, 0.05, 0);
+                    head.add(visor);
+                }
+            } else if (id === 'fuki' || id === 'himari') {
+                // Double Ox-Horn Hair Buns + Ribbons (Plus Cat Ears for Himari!)
                 const hairDome = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 14), hairMat);
                 hairDome.position.set(-0.02, 0.05, 0);
-                head.add(hairDome);
-
-                // Sleek Front Bangs & Side Cheek Locks framing face
                 const bangs = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.11, 0.32), hairMat);
                 bangs.position.set(0.15, 0.14, 0);
                 bangs.rotation.z = -0.25;
-                head.add(bangs);
+                head.add(hairDome, bangs);
 
-                const ribbonMat = new THREE.MeshBasicMaterial({ color: 0xfef08a });
                 [-0.20, 0.20].forEach(zSide => {
-                    // High Double Kung-Fu Bun
                     const bun = new THREE.Mesh(new THREE.SphereGeometry(0.125, 12, 12), hairMat);
                     bun.position.set(-0.05, 0.23, zSide);
-                    // Ornate Gold & Jade Brocade Bun Ring
                     const bunRing = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.135, 0.06, 12), trimMat);
                     bunRing.position.set(-0.05, 0.21, zSide);
                     bunRing.rotation.x = zSide > 0 ? 0.4 : -0.4;
-                    // Flowing Silk Tassel Ribbons hanging from each bun
-                    const ribbon = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.03), ribbonMat);
+                    const ribbon = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.03), trimMat);
                     ribbon.position.set(-0.14, -0.02, zSide * 1.15);
                     ribbon.rotation.z = -0.28;
-                    // Side hair framing lock
-                    const sideLock = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.26, 6), hairMat);
-                    sideLock.position.set(0.12, -0.06, zSide * 0.92);
-                    sideLock.rotation.x = Math.PI;
-                    head.add(bun, bunRing, ribbon, sideLock);
+                    head.add(bun, bunRing, ribbon);
+
+                    if (id === 'himari') {
+                        const catEar = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.18, 4), trimMat);
+                        catEar.position.set(0.04, 0.28, zSide * 0.8);
+                        head.add(catEar);
+                    }
                 });
-            } else if (charData.id === 'hanami') {
-                // Sakura Bun + Gold Hairpiece
-                const hairCap = new THREE.Mesh(new THREE.BoxGeometry(0.39, 0.2, 0.39), hairMat);
-                hairCap.position.y = 0.16;
-                const bun = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8, 8), hairMat);
-                bun.position.set(-0.18, 0.24, 0);
-                const ornament = new THREE.Mesh(new THREE.OctahedronGeometry(0.1, 0), trimMat);
-                ornament.position.set(-0.08, 0.24, 0.16);
-                head.add(hairCap, bun, ornament);
+            } else if (id === 'hanami' || id === 'yuika') {
+                // High Ponytail / Sakura Bun + Tiara / Ornament
+                const hairDome = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 14), hairMat);
+                hairDome.position.set(-0.02, 0.06, 0);
+                const ponytail = new THREE.Mesh(new THREE.ConeGeometry(0.13, 0.62, 10), hairMat);
+                ponytail.position.set(-0.26, 0.02, 0);
+                ponytail.rotation.z = -2.4;
+                const tiara = new THREE.Mesh(new THREE.OctahedronGeometry(0.11, 0), trimMat);
+                tiara.position.set(0.12, 0.24, 0);
+                head.add(hairDome, ponytail, tiara);
+            } else if (id === 'anne' || id === 'honoka') {
+                // Twin Drills / Braided Pigtails
+                const hairDome = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 14), hairMat);
+                hairDome.position.set(-0.02, 0.06, 0);
+                head.add(hairDome);
+                [-0.22, 0.22].forEach(zSide => {
+                    const drill = new THREE.Mesh(new THREE.ConeGeometry(0.10, 0.52, 8), hairMat);
+                    drill.position.set(-0.08, -0.04, zSide);
+                    drill.rotation.x = Math.PI;
+                    drill.rotation.z = -0.2;
+                    head.add(drill);
+                });
+            } else if (id === 'sara') {
+                // Sleek Kunoichi Bob Cut + Frost Scarf
+                const bob = new THREE.Mesh(new THREE.SphereGeometry(0.23, 14, 14), hairMat);
+                bob.scale.set(1.0, 1.05, 1.08);
+                bob.position.set(-0.01, 0.05, 0);
+                const scarf = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.12, 0.34), trimMat);
+                scarf.position.set(-0.14, -0.16, 0);
+                head.add(bob, scarf);
             }
 
-            // T.Koi Signature Golden Master Cape / Collar Aura
-            if (charData.id === 'tkoi') {
-                const scarf = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.78, 0.64), trimMat);
-                scarf.position.set(-0.24, 0.32, 0);
-                scarf.rotation.z = 0.18;
-                torso.add(scarf);
+            // Signature Shoulder Wings / Master Cape / Armor Pads
+            if (id === 'tkoi' || id === 'sakito' || id === 'yuika' || id === 'sora' || id === 'rintaro') {
+                const cape = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.76, 0.64), trimMat);
+                cape.position.set(-0.24, 0.32, 0);
+                cape.rotation.z = 0.18;
+                torso.add(cape);
             }
 
             // Articulated Arms (Shoulder -> Arm -> Glowing Fist)
             function buildArm(isLeft) {
                 const shoulder = new THREE.Group();
-                const zOff = isFuki ? 0.29 : 0.34;
+                const zOff = isFemale ? 0.29 : 0.34;
                 shoulder.position.set(0, 0.58, isLeft ? zOff : -zOff);
 
-                if (isFuki) {
-                    // Stylish Puffy Qipao Cap Sleeve with Gold Trim
-                    const capSleeve = new THREE.Mesh(new THREE.SphereGeometry(0.135, 10, 10), topMat);
+                if (isFemale) {
+                    const capSleeve = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), topMat);
                     capSleeve.position.y = -0.02;
                     shoulder.add(capSleeve);
 
-                    const sleeveCuff = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.04, 10), trimMat);
+                    const sleeveCuff = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.04, 10), trimMat);
                     sleeveCuff.position.y = -0.09;
                     shoulder.add(sleeveCuff);
 
-                    // Slender Feminine Arm
-                    const slenderArm = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.068, 0.42, 10), skinMat);
+                    const slenderArm = new THREE.Mesh(new THREE.CylinderGeometry(0.074, 0.066, 0.42, 10), skinMat);
                     slenderArm.position.y = -0.22;
                     slenderArm.castShadow = true;
                     shoulder.add(slenderArm);
 
-                    // Heavy Golden Kung-Fu Wrist Bangle Bracelet (Chun-Li inspired)
-                    const bangle = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.09, 12), trimMat);
+                    const bangle = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.10, 0.08, 12), trimMat);
                     bangle.position.y = -0.38;
                     shoulder.add(bangle);
 
-                    // Graceful Kung-Fu Open Palm / Martial Glove
                     const fist = new THREE.Mesh(new THREE.SphereGeometry(0.115, 10, 10), gloveMat);
                     fist.scale.set(1.1, 1.25, 0.85);
                     fist.position.y = -0.46;
@@ -1232,7 +1627,8 @@
                 upperArm.castShadow = true;
                 shoulder.add(upperArm);
 
-                const fist = new THREE.Mesh(new THREE.BoxGeometry(0.27, 0.27, 0.27), gloveMat);
+                const fistSize = ['yuto', 'fumio', 'rintaro', 'tkoi'].includes(id) ? 0.31 : 0.27;
+                const fist = new THREE.Mesh(new THREE.BoxGeometry(fistSize, fistSize, fistSize), gloveMat);
                 fist.position.y = -0.45;
                 fist.castShadow = true;
                 shoulder.add(fist);
@@ -1248,14 +1644,13 @@
                 const hipJoint = new THREE.Group();
                 hipJoint.position.set(0, -0.1, isLeft ? 0.14 : -0.14);
 
-                if (isFuki) {
-                    // Athletic Silk Kung-Fu Tights + White & Gold Traditional Lace-Up Kung-Fu Boots
+                if (isFemale) {
                     const thigh = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.085, 0.56, 12), pantsMat);
                     thigh.position.y = -0.28;
                     thigh.castShadow = true;
                     hipJoint.add(thigh);
 
-                    const whiteBootMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.3, metalness: 0.2 });
+                    const whiteBootMat = new THREE.MeshStandardMaterial({ color: isFuki ? 0xf8fafc : c.gloves, roughness: 0.3, metalness: 0.2 });
                     const bootCuff = new THREE.Mesh(new THREE.CylinderGeometry(0.098, 0.09, 0.22, 12), whiteBootMat);
                     bootCuff.position.y = -0.50;
                     hipJoint.add(bootCuff);
@@ -1782,6 +2177,7 @@
             if (fighter.isRage && !wasRage) {
                 spawnShockwaveRing(fighter.x, 1.1, 0, 0xff003c, 3.0);
                 sfx.playRageActivation();
+                sfx.rageTempoBoost = true;
             }
 
             // Update Facing Direction when grounded and not mid-attack
@@ -1972,8 +2368,8 @@
 
             if (f.state === 'idle') {
                 const breath = Math.sin(t * 5.5);
-                if (f.data.id === 'fuki') {
-                    // Graceful Poised Kung-Fu Heroine Idle Stance
+                if (f.data.gender === 'girl') {
+                    // Graceful Poised Kung-Fu / Heroine Martial Arts Stance
                     r.hips.position.y = 1.06 + breath * 0.035;
                     r.torso.rotation.z = -0.04;
                     r.torso.rotation.y = 0.22;
@@ -2070,7 +2466,7 @@
                 const hexColor = '#' + char.colors.aura.toString(16).padStart(6, '0');
 
                 const card = document.createElement('div');
-                card.className = `char-card cursor-pointer rounded-xl p-2.5 border-2 ${borderClass} relative overflow-hidden flex flex-col justify-between`;
+                card.className = `char-card cursor-pointer rounded-lg p-1.5 border-2 ${borderClass} relative overflow-hidden flex flex-col justify-between`;
                 card.onclick = () => selectCharacter(activeSelectCursor, idx);
                 card.oncontextmenu = (e) => {
                     e.preventDefault();
@@ -2079,19 +2475,19 @@
 
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-arcade font-bold uppercase px-1.5 py-0.5 rounded" style="background:${hexColor}22; color:${hexColor}; border:1px solid ${hexColor}66;">
+                        <span class="text-[9px] font-arcade font-bold uppercase px-1 py-0.2 rounded" style="background:${hexColor}22; color:${hexColor}; border:1px solid ${hexColor}66;">
                             ${char.gender.toUpperCase()}
                         </span>
-                        <div class="flex gap-1">
-                            ${isP1 ? '<span class="px-1.5 py-0.5 text-[10px] font-arcade font-black bg-cyan-400 text-slate-950 rounded">P1</span>' : ''}
-                            ${isP2 ? '<span class="px-1.5 py-0.5 text-[10px] font-arcade font-black bg-rose-500 text-white rounded">P2</span>' : ''}
+                        <div class="flex gap-0.5">
+                            ${isP1 ? '<span class="px-1 py-0.2 text-[9px] font-arcade font-black bg-cyan-400 text-slate-950 rounded">P1</span>' : ''}
+                            ${isP2 ? '<span class="px-1 py-0.2 text-[9px] font-arcade font-black bg-rose-500 text-white rounded">P2</span>' : ''}
                         </div>
                     </div>
-                    <div class="my-2">
-                        <div class="text-lg font-arcade font-black text-white tracking-wide leading-tight">${char.name}</div>
-                        <div class="text-[11px] font-bold text-slate-400 truncate">${char.title}</div>
+                    <div class="my-1">
+                        <div class="text-xs sm:text-sm font-arcade font-black text-white tracking-wide leading-tight truncate">${char.name}</div>
+                        <div class="text-[9px] font-bold text-slate-400 truncate">${char.title}</div>
                     </div>
-                    <div class="text-[10px] font-arcade font-semibold truncate" style="color:${hexColor}">
+                    <div class="text-[9px] font-arcade font-semibold truncate" style="color:${hexColor}">
                         ${char.specialName}
                     </div>
                 `;
@@ -2253,6 +2649,10 @@
 
         function startMatch() {
             sfx.init();
+            // Switch to energetic battle BGM track automatically
+            if (sfx.bgmTrackIdx === 0) {
+                sfx.setBGMTrack(selectedStage === 1 || p2.data.id === 'tkoi' ? 2 : 1);
+            }
             document.getElementById('menu-screen').classList.add('hidden');
             document.getElementById('victory-modal').classList.add('hidden');
             const hud = document.getElementById('fight-hud');
@@ -2273,6 +2673,7 @@
         function startRound() {
             p1.resetForRound();
             p2.resetForRound();
+            sfx.rageTempoBoost = false;
             roundTimer = gameMode === 'practice' ? 99 : 60;
             roundTimerAccum = 0;
             slowMoFactor = 1.0;
@@ -2335,6 +2736,8 @@
 
         function returnToCharSelect() {
             sfx.playUIClick();
+            sfx.rageTempoBoost = false;
+            sfx.setBGMTrack(0);
             gameState = 'menu';
             document.getElementById('victory-modal').classList.add('hidden');
             document.getElementById('fight-hud').classList.add('hidden');
